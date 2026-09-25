@@ -25,12 +25,6 @@ private:
 	int defence = (physical + agility);
 };
 
-
-
-
-
-
-
 enum class MenuStates //Val I Menyn
 {
 	Play,
@@ -55,3 +49,4 @@ void MenuChoiseBoxes(char aChoise);
 MenuStates GetMenuChoiseState(int& aChoise);
 bool YesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative = "YES", std::string aNegativeAlternative = "NO");
 void CheckForInputFails(int input, int aMinInput, int aMaxInput);
+void DisplayRoomTitles(int aRoom);

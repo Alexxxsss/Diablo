@@ -32,7 +32,7 @@ void GameLoop(Player &aPlayer)
 		Diablo();
 		if (YesOrNoQuestion("Wanna enter the first room? "))
 		{
-			Room::allRooms[0].EnterRoom();
+			Room::allRooms[0].EnterRoom(0);
 		}
 
 		//Room::allRooms[0].EnterRoom();
