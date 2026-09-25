@@ -146,8 +146,10 @@
     <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Room.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

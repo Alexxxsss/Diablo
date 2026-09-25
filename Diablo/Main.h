@@ -25,21 +25,10 @@ private:
 	int defence = (physical + agility);
 };
 
-class Door
-{
 
-public:
-	Door(Room room);
-	Room room;
-};
 
-class Room
-{
-public:
-	Room();
-	void EnterRoom(std::vector<Room> allRooms);
-	std::vector<Door> doors;
-};
+
+
 
 
 enum class MenuStates //Val I Menyn

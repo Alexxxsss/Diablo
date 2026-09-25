@@ -1,4 +1,5 @@
 #include "Main.h"
+#include "Room.h"
 
 #include <iostream>
 
@@ -14,10 +15,7 @@ void GameLoop(Player &aPlayer)
 	
 	DisplayStatsInMenu(aPlayer);
 
-	Room room;
-	Room room;
-	Room room;
-	Room room;
+
 
 	while (true)
 	{
@@ -32,9 +30,12 @@ void GameLoop(Player &aPlayer)
 		
 		system("cls");
 		Diablo();
-		YesOrNoQuestion("Wanna enter the first room? ");
+		if (YesOrNoQuestion("Wanna enter the first room? "))
+		{
+			Room::allRooms[0].EnterRoom();
+		}
 
-		
+		//Room::allRooms[0].EnterRoom();
 
 		//rum logik
 		//fråga vill du gå in i rum 1?
