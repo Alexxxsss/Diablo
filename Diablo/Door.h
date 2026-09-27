@@ -7,10 +7,11 @@ class Room;
 
 class Door
 {
+private:
+	Room* aRoom;
 
 public:
 
-	Door(Room aRoom);
-	//Room myRoom;
+	Door(Room* aRoom);
 
 };

@@ -2,8 +2,9 @@
 
 class Enemy
 {
+public:
 	const int GetHealth() { return health; }							//Returning current Health
-	bool ChangeEnemyAliveState(const bool aState) { alive = aState; }	//Changes the Alive State
+	void ChangeEnemyAliveState(const bool aState) { alive = aState; }	//Changes the Alive State
 
 	void TakeDamage(int aDamage)
 	{
@@ -11,6 +12,7 @@ class Enemy
 		if (health <= 0)					//Checks if Enemy is Dead
 		{
 			ChangeEnemyAliveState(false);	//Set the enemy Dealth State to true
+			health = 0;
 		}
 	}
 

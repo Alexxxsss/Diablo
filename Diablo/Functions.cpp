@@ -194,6 +194,31 @@ bool YesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative, st
 	}
 }
 
+
+//INTE TESTAT FÖRMODLIGEN INTE FUNKAR_____
+int MultibleChoiceQuestion(int aMinValue, int aMaxValue, std::vector<std::string> aAllChoicses)
+{
+	int menuChoise = 0;
+
+	while (true)
+	{
+		for (int i = aMinValue; i < aMaxValue; i++)
+		{
+			MenuChoiseBoxes(static_cast<char>(i));
+			std::cout << " " << aAllChoicses[i] << "\n";
+
+		}
+
+		std::cin >> menuChoise;	//	Asking for menu Input
+		CheckForInputFails(menuChoise, 1, 2);
+
+		return menuChoise;
+
+	}
+}
+//END OF THE THING----
+
+
 int RandomizeInt(int aMinExclusive, int aMaxNonExclusive)
 {
 	std::random_device rd;

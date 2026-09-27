@@ -15,6 +15,10 @@ public:
 	const int GetWeightCapacity() { return weightCapacity; }	//	weightCapacity
 	const int GetDefence() { return defence; }					//	defence
 
+	const int GetCurrentHealth() { return currentHealth; }
+	void TakeDamage(int aDamage) { currentHealth -= aDamage; }
+
+
 private:
 	int strength = 5;
 	int agility = 5;
@@ -23,6 +27,8 @@ private:
 	int attackValue = (strength * agility);
 	int weightCapacity = (strength + agility / 3);
 	int defence = (physical + agility);
+
+	int currentHealth = maxHealth;
 };
 
 enum class MenuStates //Val I Menyn
@@ -50,3 +56,4 @@ MenuStates GetMenuChoiseState(int& aChoise);
 bool YesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative = "YES", std::string aNegativeAlternative = "NO");
 void CheckForInputFails(int input, int aMinInput, int aMaxInput);
 void DisplayRoomTitles(int aRoom);
+int MultibleChoiceQuestion(int aMinValue = 1, int aMaxValue = 3, std::vector<std::string> = {});

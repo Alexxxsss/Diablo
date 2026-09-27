@@ -3,7 +3,7 @@
 #include "Door.h"
 #include "Room.h"
 
-Door::Door(Room aRoom)
+Door::Door(Room */*aRoom*/)
 {
-	aRoom;
+	
 }
