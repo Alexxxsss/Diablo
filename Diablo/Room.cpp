@@ -44,20 +44,28 @@ void Room::EnterRoom(int aRoomIndex, Player &aPlayer)
 		//std::cout << "Door " << i+1 << "\n";
 	}
 	EnterToContinue();
-	EnemyBattle(aPlayer, amountOfEnemies, aRoomIndex);
+	if (EnemyBattle(aPlayer, amountOfEnemies, aRoomIndex) == false) 
+	{
+		std::cout << "YOU DIED!";
+		return;
+	}
+	EnterToContinue();
 
 }
 
 
-void Room::EnemyBattle(Player& aPlayer, int &aAmountOfEnemies, int aRoomIndex)
+bool Room::EnemyBattle(Player& aPlayer, int &aAmountOfEnemies, int aRoomIndex)
 {
 	int menuChoise = 0;
 	while (true) 
 	{
+
+		
+
 		system("cls");
 
+		//-------Display room title and HP for enemy and Player-------//
 		DisplayRoomTitles(aRoomIndex + 1);
-
 		SetColor(32);
 		std::cout << "Your Health is " << aPlayer.GetCurrentHealth() << "\n\n";
 		for (int i = 0; i < aAmountOfEnemies; i++)
@@ -74,6 +82,30 @@ void Room::EnemyBattle(Player& aPlayer, int &aAmountOfEnemies, int aRoomIndex)
 			}
 		}
 		ResetColor();
+		//-----------------------------------------------------------//
+
+
+
+		//-------Check if battle is done and results-------//
+		bool enemyIsAlive = false;
+		if (aPlayer.GetCurrentHealth() <= 0)
+		{
+			return false;
+		}
+		for (int i = 1; i < aAmountOfEnemies + 1; i++)
+		{
+			if (enemies[i - 1].GetHealth() > 0)
+			{
+				enemyIsAlive = true;
+			}
+		}
+		if (enemyIsAlive == false)
+		{
+			return true;
+		}
+		//--------------------------------------------------//
+
+
 
 		std::cout << "\nChoose what enemy to attack first: \n";
 		std::cin >> menuChoise;	//	Asking for menu Input
@@ -89,4 +121,6 @@ void Room::EnemyBattle(Player& aPlayer, int &aAmountOfEnemies, int aRoomIndex)
 
 
 	}
+
+	return true;
 }

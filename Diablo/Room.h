@@ -19,5 +19,5 @@ public:
 	std::vector<Door> doors;
 	std::vector<Enemy> enemies;
 
-	void EnemyBattle(Player& aPlayer, int& aAmountOfEnemies, int RoomIndex);
+	bool EnemyBattle(Player& aPlayer, int& aAmountOfEnemies, int RoomIndex);
 };
