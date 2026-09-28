@@ -8,9 +8,10 @@ class Room;
 class Door
 {
 private:
-	Room* aRoom;
 
 public:
+	//Room GetRoom() { return aRoom; }
+	Room* aRoom = nullptr;
 
 	Door(Room* aRoom);
 

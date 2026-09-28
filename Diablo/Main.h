@@ -18,6 +18,7 @@ public:
 	const int GetCurrentHealth() { return currentHealth; }
 	void TakeDamage(int aDamage) { currentHealth -= aDamage; }
 
+	bool hasBeenToEveryRoom = false;
 
 private:
 	int strength = 5;
@@ -51,9 +52,10 @@ void ResetColor();
 int RandomizeInt(int aMinExclusive, int aMaxNonExclusive);
 bool Menu(Player& aPlayer);
 void DisplayStatsInMenu(Player& aPlayer);
-void MenuChoiseBoxes(char aChoise);
+void MenuChoiseBoxes(int aChoise, bool isInt = false);
 MenuStates GetMenuChoiseState(int& aChoise);
 bool YesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative = "YES", std::string aNegativeAlternative = "NO");
 void CheckForInputFails(int input, int aMinInput, int aMaxInput);
 void DisplayRoomTitles(int aRoom);
 int MultibleChoiceQuestion(int aMinValue = 1, int aMaxValue = 3, std::vector<std::string> = {});
+bool CheckIfYouBeenToAllRooms();

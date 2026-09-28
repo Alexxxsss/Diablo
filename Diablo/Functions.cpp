@@ -2,6 +2,7 @@
 #include <string>
 #include "Main.h"
 #include <random> 
+#include "Room.h"
 
 void ShowStats(Player& aPlayer)
 {
@@ -115,7 +116,17 @@ void EnterToContinue()
 	system("cls");
 }
 
-
+bool CheckIfYouBeenToAllRooms()
+{
+	for (Room room : Room::allRooms)
+	{
+		if (room.hasBeenHere == false)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 /// <summary>
 ///	31: Röd
@@ -134,9 +145,10 @@ void ResetColor()
 	std::cout << "\033[0m"; 
 }
 
-void MenuChoiseBoxes(char aChoise)
+void MenuChoiseBoxes(int aChoise, bool isInt)
 {
-	std::cout << "\033[" << 32 << "m" << "[" << "\033[" << 31 << "m" << aChoise << "\033[" << 32 << "m" << "]";
+	if(isInt){ std::cout << "\033[" << 32 << "m" << "[" << "\033[" << 31 << "m" << aChoise << "\033[" << 32 << "m" << "]"; }
+	else if (!isInt){ std::cout << "\033[" << 32 << "m" << "[" << "\033[" << 31 << "m" << static_cast<char>(aChoise) << "\033[" << 32 << "m" << "]"; }
 	//SetColor(32);
 	ResetColor();
 }
