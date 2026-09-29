@@ -1,13 +1,17 @@
-#include <iostream>
-#include "Main.h"
 #include "Door.h"
 #include "Room.h"
 
+Door Door::allDoors[5] = {
+	Door(&Room::allRooms[0], &Room::allRooms[1]),
+	Door(&Room::allRooms[0], &Room::allRooms[2], true),
+	Door(&Room::allRooms[1], &Room::allRooms[3]),
+	Door(&Room::allRooms[1], &Room::allRooms[4], true),
+	Door(&Room::allRooms[2], &Room::allRooms[4])
+};
 
-
-Door::Door(Room *aRoom, Room* aRoomOther, bool aDoorIsLocked)
+Door::Door(Room* aRoomA, Room* aRoomB, bool aIsLocked)
 {
-	this->aRoom = aRoom;
-	this->aRoomOther = aRoomOther;
-	this->doorIsLocked = aDoorIsLocked;
+	myRoomA = aRoomA;
+	myRoomB = aRoomB;
+	myIsLocked = aIsLocked;
 }

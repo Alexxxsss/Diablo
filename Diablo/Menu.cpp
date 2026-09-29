@@ -1,89 +1,61 @@
 #include "Main.h"
-
 #include <iostream>
 
-
-bool Menu(Player& aPlayer)
+bool RunMenu(Player& aPlayer)
 {
-	//	Locala Variabler
-	int menuChoise = 0;
+	int menuChoice = 0;
 
 	while (true)
 	{
 		while (true)
 		{
-			Diablo();
+			PrintDiabloLogo();
 
-
-			MenuChoiseBoxes('1');
+			DisplayChoiceBox('1');
 			std::cout << " PLAY\n";
 
-			MenuChoiseBoxes('2');
+			DisplayChoiceBox('2');
 			std::cout << " STATS\n";
 
-			MenuChoiseBoxes('3');
+			DisplayChoiceBox('3');
 			std::cout << " QUIT\n";
 
-			MenuChoiseBoxes('x');
+			DisplayChoiceBox('x');
 			std::cout << ": ";
 
-
-			std::cin >> menuChoise;	//	Asking for menu Input
-			CheckForInputFails(menuChoise, 1, 3);
-			if (menuChoise < 4 && menuChoise>0)
+			std::cin >> menuChoice;
+			CheckForInputFails(menuChoice, 1, 3);
+			if (menuChoice <= 3 && menuChoice > 0)
 			{
 				break;
 			}
 		}
-		
 
-		MenuStates menuState = GetMenuChoiseState(menuChoise);
-
-
+		MenuStates menuState = GetMenuChoiceState(menuChoice);
 
 		switch (menuState)
 		{
 		case MenuStates::Play:
-		{
 			return true;
-			break;
-		}
 		case MenuStates::Stats:
-		{
 			DisplayStatsInMenu(aPlayer);
 			break;
-		}
 		case MenuStates::Quit:
-		{
 			return false;
-			break;
-		}
 		}
 	}
-	
-
 }
 
-
-MenuStates GetMenuChoiseState(int& aChoise)
+MenuStates GetMenuChoiceState(int& aChoice)
 {
-	switch (aChoise)
+	switch (aChoice)
 	{
-		case 1:
-		{
-			return MenuStates::Play;
-			break;
-		}
-		case 2:
-		{
-			return MenuStates::Stats;
-			break;
-		}
-		case 3:
-		{
-			return MenuStates::Quit;
-			break;
-		}
+	case 1:
+		return MenuStates::Play;
+	case 2:
+		return MenuStates::Stats;
+	case 3:
+		return MenuStates::Quit;
 	}
 
 	return MenuStates::Quit;
@@ -92,8 +64,7 @@ MenuStates GetMenuChoiseState(int& aChoise)
 void DisplayStatsInMenu(Player& aPlayer)
 {
 	system("cls");
-	Diablo();
+	PrintDiabloLogo();
 	ShowStats(aPlayer);
-
-	EnterToContinue();
+	WaitForEnterToContinue();
 }

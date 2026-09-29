@@ -3,22 +3,26 @@
 class Enemy
 {
 public:
-	const int GetHealth() { return health; }							//Returning current Health
-	const int GetDamage() { return damage; }							//Returning Damage
-	void ChangeEnemyAliveState(const bool aState) { alive = aState; }	//Changes the Alive State
+	int GetHealth() const { return myHealth; }
+	int GetDamage() const { return myDamage; }
+	bool GetIsAlive() const { return myIsAlive; }
+
+	void SetAliveState(const bool aIsAlive) { myIsAlive = aIsAlive; }
+	void SetHealth(const int aHealth) { myHealth = aHealth; }
+	void SetDamage(const int aDamage) { myDamage = aDamage; }
 
 	void TakeDamage(int aDamage)
 	{
-		health -= aDamage;					//Deals damage to current Enemy
-		if (health <= 0)					//Checks if Enemy is Dead
+		myHealth -= aDamage;
+		if (myHealth <= 0)
 		{
-			ChangeEnemyAliveState(false);	//Set the enemy Dealth State to true
-			health = 0;
+			SetAliveState(false);
+			myHealth = 0;
 		}
 	}
 
 private:
-	int health = 30;
-	int damage = 14;
-	bool alive = true;
+	int myHealth = 30;
+	int myDamage = 14;
+	bool myIsAlive = true;
 };

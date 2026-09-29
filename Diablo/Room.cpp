@@ -1,96 +1,78 @@
 #include <iostream>
-#include "Main.h"
 #include <vector>
+#include "Main.h"
 #include "Room.h"
 #include "Door.h"
 #include "Enemy.h"
 
 Room Room::allRooms[5] = { Room(0), Room(1), Room(2), Room(3), Room(4) };
 
-Door Door::allDoors[5] = {
-	Door(&Room::allRooms[0], &Room::allRooms[1]),
-	Door(&Room::allRooms[0], &Room::allRooms[2], true),
-	Door(&Room::allRooms[1], &Room::allRooms[3]),
-	Door(&Room::allRooms[1], &Room::allRooms[4], true),
-	Door(&Room::allRooms[2], &Room::allRooms[4])
-};
-
 Room::Room(int aRoomIndex)
 {
-	roomIndex = aRoomIndex;
+	myRoomIndex = aRoomIndex;
 }
 
-void Room::EnterRoom(Player &aPlayer)
+void Room::EnterRoom(Player& aPlayer)
 {
 	system("cls");
 
-	DisplayRoomTitles(roomIndex + 1);
+	DisplayRoomTitles(myRoomIndex + 1);
 
-
-	//std::cout << "\n\n" << aRecentRoom.roomIndex+1 << "\n\n";
-	if (hasBeenHere == false)
+	if (!myHasBeenHere)
 	{
-		amountOfEnemies = RandomizeInt(1, 3);
-		
-		
-		for (Door door : Door::allDoors)
+		myAmountOfEnemies = RandomizeInt(1, 3);
+
+		for (Door& door : Door::allDoors)
 		{
-			if (door.aRoom->roomIndex == roomIndex || door.aRoomOther->roomIndex == roomIndex)
+			if (door.GetRoomA()->GetRoomIndex() == myRoomIndex || door.GetRoomB()->GetRoomIndex() == myRoomIndex)
 			{
-				doors.push_back(door);
+				myDoors.push_back(door);
 			}
 		}
 
-		for (int i = 0;i < amountOfEnemies;i++)		// Adding the randomized amount of Enemies to the vector
+		for (int i = 0; i < myAmountOfEnemies; i++)
 		{
 			Enemy enemy;
-			enemies.push_back(enemy);
+			myEnemies.push_back(enemy);
 		}
 		std::cout << "You have entered a new room!\n\n";
-		hasBeenHere = true;
+		myHasBeenHere = true;
 	}
-	
-
 
 	std::cout << "Be careful " << aPlayer.GetPlayerName() << ", This room may contain enemies be alert!\n\n";
-	//std::cout << amountOfEnemies << " Enemies has appeard\n\n";
 
-	for (int i = 0; i < amountOfDoores;i++) 
-	{
-		//std::cout << "Door " << i+1 << "\n";
-	}
-	EnterToContinue();
-	if (EnemyBattle(aPlayer) == false)
+	WaitForEnterToContinue();
+	if (!ExecuteBattle(aPlayer))
 	{
 		system("cls");
 		std::cout << "YOU DIED " << aPlayer.GetPlayerName() << "!\nByeBye!";
-		EnterToContinue();
+		WaitForEnterToContinue();
 		return;
 	}
 
 	system("pause");
 
-
-	if (roomIndex == 4)
+	if (myRoomIndex == 4)
 	{
+		system("cls");
+		PrintDiabloLogo();
 		std::cout << aPlayer.GetPlayerName() << ", You have escaped the ";
 		SetColor(31);
 		std::cout << "Diablo";
 		ResetColor();
-		std::cout << " dungeon, congrats!";
+		std::cout << " dungeon, congrats!\n";
 
-		EnterToContinue();
+		WaitForEnterToContinue();
 	}
 	else
 	{
 		DisplayRoomMenu(aPlayer);
 	}
-	
 }
 
 void Room::DisplayRoomMenu(Player& aPlayer)
 {
-	int menuChoise = 0;
+	int menuChoice = 0;
 
 	system("cls");
 
@@ -100,295 +82,199 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 
 		while (true)
 		{
-			DisplayRoomTitles(roomIndex + 1);
+			DisplayRoomTitles(myRoomIndex + 1);
 
 			std::cout << "\nWhat do you wanna do " << aPlayer.GetPlayerName() << "?\n\n";
-			MenuChoiseBoxes('0');
+			DisplayChoiceBox('0');
 			std::cout << " STATS\n";
 
-
-			for (int i = 0; i < doors.size(); i++)
+			for (size_t i = 0; i < myDoors.size(); i++)
 			{
-				MenuChoiseBoxes((i + 1), true);
-				if (doors[i].aRoom->roomIndex != roomIndex)
+				DisplayChoiceBox(static_cast<int>(i + 1), true);
+				if (myDoors[i].GetRoomA()->GetRoomIndex() != myRoomIndex)
 				{
-					std::cout << " Door " << i + 1 << " --> " << "Room " << doors[i].aRoom->roomIndex + 1 << "\n";
+					std::cout << " Door " << i + 1 << " --> " << "Room " << myDoors[i].GetRoomA()->GetRoomIndex() + 1 << "\n";
 				}
-				else if (doors[i].aRoomOther->roomIndex != roomIndex)
+				else if (myDoors[i].GetRoomB()->GetRoomIndex() != myRoomIndex)
 				{
-					std::cout << " Door " << i + 1 << " --> " << "Room " << doors[i].aRoomOther->roomIndex + 1 << "\n";
+					std::cout << " Door " << i + 1 << " --> " << "Room " << myDoors[i].GetRoomB()->GetRoomIndex() + 1 << "\n";
 				}
-
 			}
 			std::cout << "\n";
 
-
-
-			MenuChoiseBoxes('x');
+			DisplayChoiceBox('x');
 			std::cout << ": ";
 
-			std::cin >> menuChoise;
-			CheckForInputFails(menuChoise, 0, amountOfDoores + 1);
+			std::cin >> menuChoice;
+			CheckForInputFails(menuChoice, 0, myAmountOfDoors + 1);
 
-			if (menuChoise < amountOfDoores+2 && menuChoise > -1) 
+			if (menuChoice < myAmountOfDoors + 2 && menuChoice > -1)
 			{
 				break;
 			}
 		}
-		
 
-
-		for (int i = 0; i < menuChoise+1; i++)
+		for (int i = 0; i < menuChoice + 1; i++)
 		{
-			if (i == 0 && menuChoise == i)
+			if (i == 0 && menuChoice == i)
 			{
 				system("cls");
-				DisplayRoomTitles(roomIndex + 1);
+				DisplayRoomTitles(myRoomIndex + 1);
 
 				ShowStats(aPlayer);
-				EnterToContinue();
+				WaitForEnterToContinue();
 				break;
 			}
-			else if (i == menuChoise)
+			else if (i == menuChoice)
 			{
-				if (doors[menuChoise - 1].aRoom->roomIndex != roomIndex)
+				Door& selectedDoor = myDoors[menuChoice - 1];
+				Room* targetRoom = (selectedDoor.GetRoomA()->GetRoomIndex() != myRoomIndex) ? selectedDoor.GetRoomA() : selectedDoor.GetRoomB();
+
+				if (selectedDoor.GetIsLocked())
 				{
-					if (doors[menuChoise - 1].doorIsLocked == true)
+					std::cout << "This door is locked!\n";
+					if (AskYesOrNoQuestion("Wanna pick the lock (choose NO to get choice to destroy the door)?"))
 					{
-						std::cout << "This door is locked!\n";
-						if (YesOrNoQuestion("Wanna pick the lock (choose NO to get choice to destroy the door)?"))
+						while (true)
 						{
-							while (true)
+							int randomizedNumber = RandomizeInt(0, 10);
+							if (randomizedNumber <= aPlayer.GetAgility())
 							{
-								int randomizedNumberForLockPick = RandomizeInt(0, 10);
-								if (randomizedNumberForLockPick <= aPlayer.GetAgility())
+								selectedDoor.SetIsLocked(false);
+								std::cout << "Lock picked!";
+								WaitForEnterToContinue();
+								targetRoom->EnterRoom(aPlayer);
+								return;
+							}
+							else
+							{
+								if (AskYesOrNoQuestion("You failed the pick, maybe to low agility? Try Again?"))
 								{
-									doors[menuChoise - 1].doorIsLocked = false;
-									std::cout << "Lock picked!";
-									EnterToContinue();
-									doors[menuChoise - 1].aRoom->EnterRoom(aPlayer);
-									return;
-									break;
+									continue;
 								}
 								else
 								{
-									if (YesOrNoQuestion("You failed the pick, maybe to low agility? Try Again?"))
-									{
-										continue;
-									}
-									else
-									{
-										system("cls");   
-										break;
-									}
+									system("cls");
+									break;
 								}
 							}
-							
 						}
+					}
 
-						if (YesOrNoQuestion("Wanna destroy the door?"))
+					if (AskYesOrNoQuestion("Wanna destroy the door?"))
+					{
+						while (true)
 						{
-							while (true)
+							int randomizedNumber = RandomizeInt(0, 10);
+							if (randomizedNumber <= aPlayer.GetStrength())
 							{
-								int randomizedNumberForDoorBreak = RandomizeInt(0, 10);
-								if (randomizedNumberForDoorBreak <= aPlayer.GetAgility())
+								selectedDoor.SetIsLocked(false);
+								std::cout << "Door broken!";
+								WaitForEnterToContinue();
+								targetRoom->EnterRoom(aPlayer);
+								return;
+							}
+							else
+							{
+								if (AskYesOrNoQuestion("You failed the door break, maybe to low strength? Try Again?"))
 								{
-									doors[menuChoise - 1].doorIsLocked = false;
-									std::cout << "Door broken!";
-									EnterToContinue();
-									doors[menuChoise - 1].aRoom->EnterRoom(aPlayer);
-									return;
-									break;
+									continue;
 								}
 								else
 								{
-									if (YesOrNoQuestion("You failed the door break, maybe to low strength? Try Again?"))
-									{
-										continue;
-									}
-									else
-									{
-										system("cls");
-										break;
-									}
-								}
-							}
-
-						}
-					}
-					else
-					{
-						doors[menuChoise - 1].aRoom->EnterRoom(aPlayer);
-					}
-
-				}
-				else if (doors[menuChoise - 1].aRoomOther->roomIndex != roomIndex)
-				{
-					if (doors[menuChoise - 1].doorIsLocked == true)
-					{
-						std::cout << "This door is locked!\n";
-						if (YesOrNoQuestion("Wanna pick the lock (choose NO to get choice to destroy the door)?"))
-						{
-							while (true) 
-							{
-								int randomizedNumberForLockPick = RandomizeInt(0, 10);
-								if (randomizedNumberForLockPick <= aPlayer.GetAgility()) 
-								{
-									doors[menuChoise - 1].doorIsLocked = false;
-									std::cout << "Lock picked!";
-									EnterToContinue();
-									doors[menuChoise - 1].aRoomOther->EnterRoom(aPlayer);
-									return;
+									system("cls");
 									break;
 								}
-								else 
-								{
-									if (YesOrNoQuestion("You failed the pick, maybe to low agility? Try Again?")) 
-									{
-										continue;
-									}
-									else 
-									{
-										system("cls");
-										break;
-									}
-								}
-								
-								
 							}
-							
 						}
-
-						if (YesOrNoQuestion("Wanna destroy the door?"))
-						{
-							while (true)
-							{
-								int randomizedNumberForDoorBreak = RandomizeInt(0, 10);
-								if (randomizedNumberForDoorBreak <= aPlayer.GetStrength())
-								{
-									doors[menuChoise - 1].doorIsLocked = false;
-									std::cout << "Door broken!";
-									EnterToContinue();
-									doors[menuChoise - 1].aRoomOther->EnterRoom(aPlayer);
-									return;
-									break;
-								}
-								else
-								{
-									if (YesOrNoQuestion("You failed the door break, maybe to low strength? Try Again?"))
-									{
-										continue;
-									}
-									else
-									{
-										system("cls");
-										break;
-									}
-								}
-
-
-							}
-
-						}
-					}
-					else
-					{
-						doors[menuChoise - 1].aRoomOther->EnterRoom(aPlayer);
 					}
 				}
-
-				//doors[menuChoise - 1].aRoom->EnterRoom(aPlayer, *this);
-				
+				else
+				{
+					targetRoom->EnterRoom(aPlayer);
+					return;
+				}
 			}
 		}
 	}
-	return;
-	
 }
 
-bool Room::EnemyBattle(Player& aPlayer)
+bool Room::ExecuteBattle(Player& aPlayer)
 {
-	int menuChoise = 0;
-	while (true) 
+	int menuChoice = 0;
+	while (true)
 	{
-
-		
-
 		system("cls");
 
-		//-------Display room title and HP for enemy and Player-------//
-		DisplayRoomTitles(roomIndex + 1);
+		DisplayRoomTitles(myRoomIndex + 1);
 		std::cout << "You are in battle! If you type wrong you miss your attack!\n\n";
 		SetColor(32);
 		std::cout << aPlayer.GetPlayerName() << "(you) Has " << aPlayer.GetCurrentHealth() << "HP\n\n";
-		for (int i = 0; i < amountOfEnemies; i++)
+		for (int i = 0; i < myAmountOfEnemies; i++)
 		{
-			if (enemies[i].GetHealth() <= 0)
+			if (myEnemies[i].GetHealth() <= 0)
 			{
-				MenuChoiseBoxes(i+1,true);
+				DisplayChoiceBox(i + 1, true);
 				SetColor(31);
-				std::cout << " Enemy " << i + 1 << " Has " << enemies[i].GetHealth() << "HP\n";
+				std::cout << " Enemy " << i + 1 << " Has " << myEnemies[i].GetHealth() << "HP\n";
 			}
 			else
 			{
-				MenuChoiseBoxes(i + 1, true);
+				DisplayChoiceBox(i + 1, true);
 				SetColor(32);
-				std::cout << " Enemy " << i + 1 << " Has " << enemies[i].GetHealth() << "HP\n";
+				std::cout << " Enemy " << i + 1 << " Has " << myEnemies[i].GetHealth() << "HP\n";
 			}
 		}
 		ResetColor();
-		//-----------------------------------------------------------//
 
-
-
-		//-------Check if battle is done and results-------//
-		bool enemyIsAlive = false;
 		if (aPlayer.GetCurrentHealth() <= 0)
 		{
 			return false;
 		}
-		for (int i = 1; i < amountOfEnemies + 1; i++)
+
+		bool enemyIsAlive = false;
+		for (int i = 0; i < myAmountOfEnemies; i++)
 		{
-			if (enemies[i - 1].GetHealth() > 0)
+			if (myEnemies[i].GetHealth() > 0)
 			{
 				enemyIsAlive = true;
+				break;
 			}
 		}
-		if (enemyIsAlive == false)
+		if (!enemyIsAlive)
 		{
 			return true;
 		}
-		//--------------------------------------------------//
-
-
 
 		std::cout << "\nChoose what enemy to attack first: \n";
-		std::cin >> menuChoise;	//	Asking for menu Input
-		CheckForInputFails(menuChoise, 1, amountOfEnemies);
-		
-		for (int i = 1; i < amountOfEnemies+1; i++)
+		std::cin >> menuChoice;
+		CheckForInputFails(menuChoice, 1, myAmountOfEnemies);
+
+		for (int i = 1; i <= myAmountOfEnemies; i++)
 		{
-			if (i == menuChoise) 
+			if (i == menuChoice)
 			{
-				enemies[i - 1].TakeDamage(aPlayer.GetAttackValue());
+				myEnemies[i - 1].TakeDamage(aPlayer.GetAttackValue());
 			}
 		}
 
 		int enemiesCombinedDamage = 0;
-		for (Enemy enemy : enemies)
+		for (Enemy& enemy : myEnemies)
 		{
 			if (enemy.GetHealth() > 0)
 			{
-				enemiesCombinedDamage = enemiesCombinedDamage + enemy.GetDamage() - aPlayer.GetDefence();
+				enemiesCombinedDamage += (enemy.GetDamage() - aPlayer.GetDefence());
 			}
 		}
-		aPlayer.TakeDamage(enemiesCombinedDamage);
 
-		if (aPlayer.GetAliveState() == false)
+		if (enemiesCombinedDamage > 0)
+		{
+			aPlayer.TakeDamage(enemiesCombinedDamage);
+		}
+
+		if (!aPlayer.GetAliveState())
 		{
 			return false;
 		}
 	}
-
-	return true;
 }

@@ -2,27 +2,44 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "Enemy.h" 
+#include "Enemy.h"
 #include "Door.h"
-//class Door;
-class Player;
 
-//class Enemy;
+class Player;
 
 class Room
 {
 public:
 	static Room allRooms[5];
 
-	bool hasBeenHere = false;
-	int amountOfEnemies = 1;
-	int amountOfDoores = 1;
-	int roomIndex = 1;
-
 	Room(int aRoomIndex);
+
 	void EnterRoom(Player& aPlayer);
-	std::vector<Door> doors;
-	std::vector<Enemy> enemies;
 	void DisplayRoomMenu(Player& aPlayer);
-	bool EnemyBattle(Player& aPlayer);
+	bool ExecuteBattle(Player& aPlayer);
+
+	// Getters & Setters
+	int GetRoomIndex() const { return myRoomIndex; }
+	void SetRoomIndex(int aRoomIndex) { myRoomIndex = aRoomIndex; }
+
+	bool GetHasBeenHere() const { return myHasBeenHere; }
+	void SetHasBeenHere(bool aHasBeenHere) { myHasBeenHere = aHasBeenHere; }
+
+	int GetAmountOfEnemies() const { return myAmountOfEnemies; }
+	void SetAmountOfEnemies(int aAmount) { myAmountOfEnemies = aAmount; }
+
+	int GetAmountOfDoors() const { return myAmountOfDoors; }
+	void SetAmountOfDoors(int aAmount) { myAmountOfDoors = aAmount; }
+
+	std::vector<Door>& GetDoors() { return myDoors; }
+	std::vector<Enemy>& GetEnemies() { return myEnemies; }
+
+private:
+	bool myHasBeenHere = false;
+	int myAmountOfEnemies = 1;
+	int myAmountOfDoors = 1;
+	int myRoomIndex = 1;
+
+	std::vector<Door> myDoors;
+	std::vector<Enemy> myEnemies;
 };

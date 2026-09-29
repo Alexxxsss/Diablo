@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
+#include <random>
 #include "Main.h"
-#include <random> 
 #include "Room.h"
 
 void ShowStats(Player& aPlayer)
@@ -22,7 +22,7 @@ void ShowStats(Player& aPlayer)
 	std::cout << "Defence: " << aPlayer.GetDefence() << "\n";
 }
 
-void Diablo()
+void PrintDiabloLogo()
 {
 	SetColor(31);
 	std::cout << " ______   ___   _______  _______  ___      _______ \n";
@@ -35,92 +35,69 @@ void Diablo()
 	ResetColor();
 }
 
-void DisplayRoomTitles(int aRoom)
+void DisplayRoomTitles(int aRoomIndex)
 {
 	SetColor(31);
-	switch (aRoom)
+	switch (aRoomIndex)
 	{
-		case 0:
-		{
-			// ROOM 0
-
-			std::cout << " ____   ___   ___  __  __   ___  \n";
-			std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  | / _ \\ \n";
-			std::cout << "| |_) | | | | | | | |\\/| || | | |\n";
-			std::cout << "|  _ <| |_| | |_| | |  | || |_| |\n";
-			std::cout << "|_| \\_\\\\___/ \\___/|_|  |_| \\___/ \n\n";
-			break;
-		}
-		case 1:
-		{
-			// ROOM 1
-			std::cout << " ____   ___   ___  __  __   _ \n";
-			std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  | / |\n";
-			std::cout << "| |_) | | | | | | | |\\/| | | |\n";
-			std::cout << "|  _ <| |_| | |_| | |  | | | |\n";
-			std::cout << "|_| \\_\\\\___/ \\___/|_|  |_| |_|\n\n";
-			break;
-		}
-		case 2:
-		{
-			// ROOM 2
-			std::cout << " ____   ___   ___  __  __  ____  \n";
-			std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  ||___ \\ \n";
-			std::cout << "| |_) | | | | | | | |\\/| |  __) |\n";
-			std::cout << "|  _ <| |_| | |_| | |  | | / __/ \n";
-			std::cout << "|_| \\_\\\\___/ \\___/|_|  |_||_____|\n\n";
-			break;
-		}
-		case 3:
-		{
-			// ROOM 3
-			std::cout << " ____   ___   ___  __  __  _____ \n";
-			std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  ||___ / \n";
-			std::cout << "| |_) | | | | | | | |\\/| | |_ \\ \n";
-			std::cout << "|  _ <| |_| | |_| | |  | |___) |\n";
-			std::cout << "|_| \\_\\\\___/ \\___/|_|  |_|____/ \n\n";
-			break;
-		}
-		case 4:
-		{
-			// ROOM 4
-			std::cout << " ____   ___   ___  __  __   _  _   \n";
-			std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  | | || |  \n";
-			std::cout << "| |_) | | | | | | | |\\/| | | || |_ \n";
-			std::cout << "|  _ <| |_| | |_| | |  | | |__   _|\n";
-			std::cout << "|_| \\_\\\\___/ \\___/|_|  |_|    |_|  \n\n";
-			break;
-		}
-		case 5:
-		{
-			// ROOM 5
-			std::cout << " ____   ___   ___  __  __  ____  \n";
-			std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  || ___| \n";
-			std::cout << "| |_) | | | | | | | |\\/| ||___ \\ \n";
-			std::cout << "|  _ <| |_| | |_| | |  | |___) |\n";
-			std::cout << "|_| \\_\\\\___/ \\___/|_|  |_|____/  \n\n";
-			break;
-		}
-
+	case 0:
+		std::cout << " ____   ___   ___  __  __   ___  \n";
+		std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  | / _ \\ \n";
+		std::cout << "| |_) | | | | | | | |\\/| || | | |\n";
+		std::cout << "|  _ <| |_| | |_| | |  | || |_| |\n";
+		std::cout << "|_| \\_\\\\___/ \\___/|_|  |_| \\___/ \n\n";
+		break;
+	case 1:
+		std::cout << " ____   ___   ___  __  __   _ \n";
+		std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  | / |\n";
+		std::cout << "| |_) | | | | | | | |\\/| | | |\n";
+		std::cout << "|  _ <| |_| | |_| | |  | | | |\n";
+		std::cout << "|_| \\_\\\\___/ \\___/|_|  |_| |_|\n\n";
+		break;
+	case 2:
+		std::cout << " ____   ___   ___  __  __  ____  \n";
+		std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  ||___ \\ \n";
+		std::cout << "| |_) | | | | | | | |\\/| |  __) |\n";
+		std::cout << "|  _ <| |_| | |_| | |  | | / __/ \n";
+		std::cout << "|_| \\_\\\\___/ \\___/|_|  |_||_____|\n\n";
+		break;
+	case 3:
+		std::cout << " ____   ___   ___  __  __  _____ \n";
+		std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  ||___ / \n";
+		std::cout << "| |_) | | | | | | | |\\/| | |_ \\ \n";
+		std::cout << "|  _ <| |_| | |_| | |  | |___) |\n";
+		std::cout << "|_| \\_\\\\___/ \\___/|_|  |_|____/ \n\n";
+		break;
+	case 4:
+		std::cout << " ____   ___   ___  __  __   _  _   \n";
+		std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  | | || |  \n";
+		std::cout << "| |_) | | | | | | | |\\/| | | || |_ \n";
+		std::cout << "|  _ <| |_| | |_| | |  | | |__   _|\n";
+		std::cout << "|_| \\_\\\\___/ \\___/|_|  |_|    |_|  \n\n";
+		break;
+	case 5:
+		std::cout << " ____   ___   ___  __  __  ____  \n";
+		std::cout << "|  _ \\ / _ \\ / _ \\|  \\/  || ___| \n";
+		std::cout << "| |_) | | | | | | | |\\/| ||___ \\ \n";
+		std::cout << "|  _ <| |_| | |_| | |  | |___) |\n";
+		std::cout << "|_| \\_\\\\___/ \\___/|_|  |_|____/  \n\n";
+		break;
 	}
 	ResetColor();
-	
 }
 
-void EnterToContinue()
+void WaitForEnterToContinue()
 {
 	std::cout << "\n";
-
 	system("pause");
-
 	system("cls");
 }
 
 bool CheckIfYouBeenToAllRooms()
 {
-	for (Room room : Room::allRooms)
+	for (const Room& room : Room::allRooms)
 	{
-		if (room.hasBeenHere == false)
+		if (!room.GetHasBeenHere())
 		{
 			return false;
 		}
@@ -128,32 +105,30 @@ bool CheckIfYouBeenToAllRooms()
 	return true;
 }
 
-/// <summary>
-///	31: Röd
-///	32: Grön
-///	33: Gul
-///	34: Blå
-///	35: Lila
-///	37: Vit
-/// </summary>
 void SetColor(int aTextColor)
 {
 	std::cout << "\033[" << aTextColor << "m";
 }
-void ResetColor() 
-{ 
-	std::cout << "\033[0m"; 
+
+void ResetColor()
+{
+	std::cout << "\033[0m";
 }
 
-void MenuChoiseBoxes(int aChoise, bool isInt)
+void DisplayChoiceBox(int aChoice, bool aIsInt)
 {
-	if(isInt){ std::cout << "\033[" << 32 << "m" << "[" << "\033[" << 31 << "m" << aChoise << "\033[" << 32 << "m" << "]"; }
-	else if (!isInt){ std::cout << "\033[" << 32 << "m" << "[" << "\033[" << 31 << "m" << static_cast<char>(aChoise) << "\033[" << 32 << "m" << "]"; }
-	//SetColor(32);
+	if (aIsInt)
+	{
+		std::cout << "\033[32m[\033[31m" << aChoice << "\033[32m]";
+	}
+	else
+	{
+		std::cout << "\033[32m[\033[31m" << static_cast<char>(aChoice) << "\033[32m]";
+	}
 	ResetColor();
 }
 
-void CheckForInputFails(int input, int aMinInput, int aMaxInput)
+void CheckForInputFails(int aInput, int aMinInput, int aMaxInput)
 {
 	if (std::cin.fail())
 	{
@@ -162,81 +137,66 @@ void CheckForInputFails(int input, int aMinInput, int aMaxInput)
 		std::cout << "Felaktig inmatning!.\n";
 	}
 
-	if (input < aMinInput || input >aMaxInput)
+	if (aInput < aMinInput || aInput > aMaxInput)
 	{
 		std::cout << "Felaktig inmatning!.\n";
 	}
 }
 
-bool YesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative, std::string aNegativeAlternative)
+bool AskYesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative, std::string aNegativeAlternative)
 {
-	int menuChoise = 0;
+	int menuChoice = 0;
 
 	while (true)
 	{
 		std::cout << aQuestion << "\n";
 
-
-		MenuChoiseBoxes('1');
+		DisplayChoiceBox('1');
 		std::cout << " " << aPositiveAlternative << "\n";
 
-		MenuChoiseBoxes('2');
+		DisplayChoiceBox('2');
 		std::cout << " " << aNegativeAlternative << "\n";
 
-		MenuChoiseBoxes('x');
+		DisplayChoiceBox('x');
 		std::cout << ": ";
 
-		//SetColor(31);			//	Input Color
-		std::cin >> menuChoise;	//	Asking for menu Input
-		CheckForInputFails(menuChoise,1,2);
-		//ResetColor();			//	Reset Color
+		std::cin >> menuChoice;
+		CheckForInputFails(menuChoice, 1, 2);
 
-		if (menuChoise == 1)
+		if (menuChoice == 1)
 		{
 			return true;
 		}
-		else if (menuChoise == 2)
+		else if (menuChoice == 2)
 		{
 			return false;
-		}
-		else
-		{
-			//ngt fel
 		}
 	}
 }
 
-
-//INTE TESTAT FÖRMODLIGEN INTE FUNKAR_____
-int MultibleChoiceQuestion(int aMinValue, int aMaxValue, std::vector<std::string> aAllChoicses)
+int AskMultipleChoiceQuestion(int aMinValue, int aMaxValue, std::vector<std::string> aAllChoices)
 {
-	int menuChoise = 0;
+	int menuChoice = 0;
 
 	while (true)
 	{
 		for (int i = aMinValue; i < aMaxValue; i++)
 		{
-			MenuChoiseBoxes(static_cast<char>(i));
-			std::cout << " " << aAllChoicses[i] << "\n";
-
+			DisplayChoiceBox(static_cast<char>(i));
+			std::cout << " " << aAllChoices[i] << "\n";
 		}
 
-		std::cin >> menuChoise;	//	Asking for menu Input
-		CheckForInputFails(menuChoise, 1, 2);
+		std::cin >> menuChoice;
+		CheckForInputFails(menuChoice, 1, 2);
 
-		return menuChoise;
-
+		return menuChoice;
 	}
 }
-//END OF THE THING----
 
-
-int RandomizeInt(int aMinExclusive, int aMaxNonExclusive)
+int RandomizeInt(int aMinInclusive, int aMaxInclusive)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> distrib(aMinExclusive, aMaxNonExclusive);
-
-
+	std::uniform_int_distribution<int> distrib(aMinInclusive, aMaxInclusive);
 	return distrib(gen);
 }
