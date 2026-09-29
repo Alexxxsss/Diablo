@@ -18,7 +18,6 @@ public:
 	void DisplayRoomMenu(Player& aPlayer);
 	bool ExecuteBattle(Player& aPlayer);
 
-	// Getters & Setters
 	int GetRoomIndex() const { return myRoomIndex; }
 	void SetRoomIndex(int aRoomIndex) { myRoomIndex = aRoomIndex; }
 
@@ -31,7 +30,7 @@ public:
 	int GetAmountOfDoors() const { return myAmountOfDoors; }
 	void SetAmountOfDoors(int aAmount) { myAmountOfDoors = aAmount; }
 
-	std::vector<Door>& GetDoors() { return myDoors; }
+	std::vector<Door*>& GetDoors() { return myDoors; }
 	std::vector<Enemy>& GetEnemies() { return myEnemies; }
 
 private:
@@ -40,6 +39,6 @@ private:
 	int myAmountOfDoors = 1;
 	int myRoomIndex = 1;
 
-	std::vector<Door> myDoors;
+	std::vector<Door*> myDoors;
 	std::vector<Enemy> myEnemies;
 };

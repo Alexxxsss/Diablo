@@ -26,7 +26,7 @@ void Room::EnterRoom(Player& aPlayer)
 		{
 			if (door.GetRoomA()->GetRoomIndex() == myRoomIndex || door.GetRoomB()->GetRoomIndex() == myRoomIndex)
 			{
-				myDoors.push_back(door);
+				myDoors.push_back(&door);
 			}
 		}
 
@@ -54,13 +54,11 @@ void Room::EnterRoom(Player& aPlayer)
 
 	if (myRoomIndex == 4)
 	{
-		system("cls");
-		PrintDiabloLogo();
 		std::cout << aPlayer.GetPlayerName() << ", You have escaped the ";
 		SetColor(31);
 		std::cout << "Diablo";
 		ResetColor();
-		std::cout << " dungeon, congrats!\n";
+		std::cout << " dungeon, congrats!";
 
 		WaitForEnterToContinue();
 	}
@@ -91,13 +89,13 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 			for (size_t i = 0; i < myDoors.size(); i++)
 			{
 				DisplayChoiceBox(static_cast<int>(i + 1), true);
-				if (myDoors[i].GetRoomA()->GetRoomIndex() != myRoomIndex)
+				if (myDoors[i]->GetRoomA()->GetRoomIndex() != myRoomIndex)
 				{
-					std::cout << " Door " << i + 1 << " --> " << "Room " << myDoors[i].GetRoomA()->GetRoomIndex() + 1 << "\n";
+					std::cout << " Door " << i + 1 << " --> " << "Room " << myDoors[i]->GetRoomA()->GetRoomIndex() + 1 << "\n";
 				}
-				else if (myDoors[i].GetRoomB()->GetRoomIndex() != myRoomIndex)
+				else if (myDoors[i]->GetRoomB()->GetRoomIndex() != myRoomIndex)
 				{
-					std::cout << " Door " << i + 1 << " --> " << "Room " << myDoors[i].GetRoomB()->GetRoomIndex() + 1 << "\n";
+					std::cout << " Door " << i + 1 << " --> " << "Room " << myDoors[i]->GetRoomB()->GetRoomIndex() + 1 << "\n";
 				}
 			}
 			std::cout << "\n";
@@ -106,95 +104,91 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 			std::cout << ": ";
 
 			std::cin >> menuChoice;
-			CheckForInputFails(menuChoice, 0, myAmountOfDoors + 1);
+			CheckForInputFails(menuChoice, 0, static_cast<int>(myDoors.size()));
 
-			if (menuChoice < myAmountOfDoors + 2 && menuChoice > -1)
+			if (menuChoice <= static_cast<int>(myDoors.size()) && menuChoice >= 0)
 			{
 				break;
 			}
 		}
 
-		for (int i = 0; i < menuChoice + 1; i++)
+		if (menuChoice == 0)
 		{
-			if (i == 0 && menuChoice == i)
-			{
-				system("cls");
-				DisplayRoomTitles(myRoomIndex + 1);
+			system("cls");
+			DisplayRoomTitles(myRoomIndex + 1);
+			ShowStats(aPlayer);
+			WaitForEnterToContinue();
+			continue;
+		}
 
-				ShowStats(aPlayer);
-				WaitForEnterToContinue();
-				break;
-			}
-			else if (i == menuChoice)
-			{
-				Door& selectedDoor = myDoors[menuChoice - 1];
-				Room* targetRoom = (selectedDoor.GetRoomA()->GetRoomIndex() != myRoomIndex) ? selectedDoor.GetRoomA() : selectedDoor.GetRoomB();
+		Door* selectedDoor = myDoors[menuChoice - 1];
+		Room* targetRoom = (selectedDoor->GetRoomA()->GetRoomIndex() != myRoomIndex)
+			? selectedDoor->GetRoomA()
+			: selectedDoor->GetRoomB();
 
-				if (selectedDoor.GetIsLocked())
+		if (selectedDoor->GetIsLocked())
+		{
+			std::cout << "This door is locked!\n";
+			if (AskYesOrNoQuestion("Wanna pick the lock (choose NO to get choice to destroy the door)?"))
+			{
+				while (true)
 				{
-					std::cout << "This door is locked!\n";
-					if (AskYesOrNoQuestion("Wanna pick the lock (choose NO to get choice to destroy the door)?"))
+					int randomizedNumber = RandomizeInt(0, 10);
+					if (randomizedNumber <= aPlayer.GetAgility())
 					{
-						while (true)
-						{
-							int randomizedNumber = RandomizeInt(0, 10);
-							if (randomizedNumber <= aPlayer.GetAgility())
-							{
-								selectedDoor.SetIsLocked(false);
-								std::cout << "Lock picked!";
-								WaitForEnterToContinue();
-								targetRoom->EnterRoom(aPlayer);
-								return;
-							}
-							else
-							{
-								if (AskYesOrNoQuestion("You failed the pick, maybe to low agility? Try Again?"))
-								{
-									continue;
-								}
-								else
-								{
-									system("cls");
-									break;
-								}
-							}
-						}
+						selectedDoor->SetIsLocked(false);
+						std::cout << "Lock picked!";
+						WaitForEnterToContinue();
+						targetRoom->EnterRoom(aPlayer);
+						return;
 					}
-
-					if (AskYesOrNoQuestion("Wanna destroy the door?"))
+					else
 					{
-						while (true)
+						if (AskYesOrNoQuestion("You failed the pick, maybe to low agility? Try Again?"))
 						{
-							int randomizedNumber = RandomizeInt(0, 10);
-							if (randomizedNumber <= aPlayer.GetStrength())
-							{
-								selectedDoor.SetIsLocked(false);
-								std::cout << "Door broken!";
-								WaitForEnterToContinue();
-								targetRoom->EnterRoom(aPlayer);
-								return;
-							}
-							else
-							{
-								if (AskYesOrNoQuestion("You failed the door break, maybe to low strength? Try Again?"))
-								{
-									continue;
-								}
-								else
-								{
-									system("cls");
-									break;
-								}
-							}
+							continue;
+						}
+						else
+						{
+							system("cls");
+							break;
 						}
 					}
 				}
-				else
+			}
+
+			if (AskYesOrNoQuestion("Wanna destroy the door?"))
+			{
+				while (true)
 				{
-					targetRoom->EnterRoom(aPlayer);
-					return;
+					int randomizedNumber = RandomizeInt(0, 10);
+					if (randomizedNumber <= aPlayer.GetStrength())
+					{
+						selectedDoor->SetIsLocked(false);
+						std::cout << "Door broken!";
+						WaitForEnterToContinue();
+						targetRoom->EnterRoom(aPlayer);
+						return;
+					}
+					else
+					{
+						if (AskYesOrNoQuestion("You failed the door break, maybe to low strength? Try Again?"))
+						{
+							continue;
+						}
+						else
+						{
+							system("cls");
+							break;
+						}
+					}
 				}
 			}
+		}
+		else
+		{
+			targetRoom->EnterRoom(aPlayer);
+			return;
 		}
 	}
 }
@@ -263,7 +257,11 @@ bool Room::ExecuteBattle(Player& aPlayer)
 		{
 			if (enemy.GetHealth() > 0)
 			{
-				enemiesCombinedDamage += (enemy.GetDamage() - aPlayer.GetDefence());
+				int damageTaken = enemy.GetDamage() - aPlayer.GetDefence();
+				if (damageTaken > 0)
+				{
+					enemiesCombinedDamage += damageTaken;
+				}
 			}
 		}
 

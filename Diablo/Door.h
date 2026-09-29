@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 
 class Room;
 
@@ -10,7 +9,6 @@ public:
 
 	Door(Room* aRoomA, Room* aRoomB, bool aIsLocked = false);
 
-	// Getters and Setters
 	Room* GetRoomA() const { return myRoomA; }
 	void SetRoomA(Room* aRoomA) { myRoomA = aRoomA; }
 

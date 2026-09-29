@@ -134,12 +134,12 @@ void CheckForInputFails(int aInput, int aMinInput, int aMaxInput)
 	{
 		std::cin.clear();
 		std::cin.ignore(10000, '\n');
-		std::cout << "Felaktig inmatning!.\n";
+		std::cout << "Cant input that!.\n";
 	}
 
 	if (aInput < aMinInput || aInput > aMaxInput)
 	{
-		std::cout << "Felaktig inmatning!.\n";
+		std::cout << "Cant input that!.\n";
 	}
 }
 
