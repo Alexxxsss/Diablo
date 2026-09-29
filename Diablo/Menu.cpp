@@ -10,25 +10,32 @@ bool Menu(Player& aPlayer)
 
 	while (true)
 	{
-		Diablo();
+		while (true)
+		{
+			Diablo();
 
 
-		MenuChoiseBoxes('1');
-		std::cout << " PLAY\n";
+			MenuChoiseBoxes('1');
+			std::cout << " PLAY\n";
 
-		MenuChoiseBoxes('2');
-		std::cout << " STATS\n";
+			MenuChoiseBoxes('2');
+			std::cout << " STATS\n";
 
-		MenuChoiseBoxes('3');
-		std::cout << " QUIT\n";
+			MenuChoiseBoxes('3');
+			std::cout << " QUIT\n";
 
-		MenuChoiseBoxes('x');
-		std::cout << ": ";
+			MenuChoiseBoxes('x');
+			std::cout << ": ";
 
 
-		//SetColor(31);			//	Input Color
-		std::cin >> menuChoise;	//	Asking for menu Input
-		//ResetColor();			//	Reset Color
+			std::cin >> menuChoise;	//	Asking for menu Input
+			CheckForInputFails(menuChoise, 1, 3);
+			if (menuChoise < 4 && menuChoise>0)
+			{
+				break;
+			}
+		}
+		
 
 		MenuStates menuState = GetMenuChoiseState(menuChoise);
 

@@ -59,7 +59,7 @@ void GameLoop(Player &aPlayer)
 		{
 			Room::allRooms[0].EnterRoom(aPlayer);
 		}
-
+		break;
 		//Room::allRooms[0].EnterRoom();
 
 		//rum logik
