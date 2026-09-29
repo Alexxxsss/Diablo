@@ -20,10 +20,9 @@ public:
 	int roomIndex = 1;
 
 	Room(int aRoomIndex);
-	void EnterRoom(Player& aPlayer, Room aRecentRoom = { 3817 });
+	void EnterRoom(Player& aPlayer);
 	std::vector<Door> doors;
 	std::vector<Enemy> enemies;
-	void DisplayRoomMenu(Player& aPlayer, Room& aRecentRoom);
+	void DisplayRoomMenu(Player& aPlayer);
 	bool EnemyBattle(Player& aPlayer);
 };
-inline Room Room::allRooms[5] = { Room(0), Room(1), Room(2), Room(3), Room(4) };

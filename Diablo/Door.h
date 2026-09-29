@@ -10,9 +10,11 @@ class Door
 private:
 
 public:
-	//Room GetRoom() { return aRoom; }
+	static Door allDoors[5];
 	Room* aRoom = nullptr;
-
-	Door(Room* aRoom);
+	Room* aRoomOther = nullptr;
+	bool doorIsLocked;
+	Door(Room* aRoom, Room* aRoomOther, bool aDoorIsLocked = false);
 
 };
+

@@ -3,7 +3,11 @@
 #include "Door.h"
 #include "Room.h"
 
-Door::Door(Room *aRoom)
+
+
+Door::Door(Room *aRoom, Room* aRoomOther, bool aDoorIsLocked)
 {
 	this->aRoom = aRoom;
+	this->aRoomOther = aRoomOther;
+	this->doorIsLocked = aDoorIsLocked;
 }
