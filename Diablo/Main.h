@@ -15,9 +15,35 @@ public:
 	const int GetWeightCapacity() { return weightCapacity; }	//	weightCapacity
 	const int GetDefence() { return defence; }					//	defence
 
-	const int GetCurrentHealth() { return currentHealth; }
-	void TakeDamage(int aDamage) { currentHealth -= aDamage; }
+	const int GetAliveState() { return isAlive; }
+	const std::string GetPlayerName() { return playerName; }
 
+	const int GetCurrentHealth() { return currentHealth; }
+	void ChangePlayerAliveState(const bool aState) { isAlive = aState; }	//Changes the Alive State
+	void TakeDamage(int aDamage) 
+	{ 
+		currentHealth -= aDamage; 
+		if (currentHealth <= 0)					//Checks if Enemy is Dead
+		{
+			ChangePlayerAliveState(false);	//Set the enemy Dealth State to true
+			currentHealth = 0;
+		}
+	}
+
+	void SetPlayerHealthForCheats(int aPlayerHealth)
+	{
+		maxHealth = aPlayerHealth;
+		currentHealth = aPlayerHealth;
+	}
+	void SetPlayerDamageForCheats(int aAttackValue)
+	{
+		attackValue = aAttackValue;
+	}
+	void SetPlayerName(std::string aPlayerName)
+	{
+		playerName = aPlayerName;
+	}
+	
 	bool hasBeenToEveryRoom = false;
 
 private:
@@ -30,6 +56,8 @@ private:
 	int defence = (physical + agility);
 
 	int currentHealth = maxHealth;
+	bool isAlive = true;
+	std::string playerName;
 };
 
 enum class MenuStates //Val I Menyn
@@ -59,3 +87,4 @@ void CheckForInputFails(int input, int aMinInput, int aMaxInput);
 void DisplayRoomTitles(int aRoom);
 int MultibleChoiceQuestion(int aMinValue = 1, int aMaxValue = 3, std::vector<std::string> = {});
 bool CheckIfYouBeenToAllRooms();
+void DisplayPregameOptions(Player& aPlayer);

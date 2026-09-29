@@ -22,8 +22,11 @@ Room::Room(int aRoomIndex)
 
 void Room::EnterRoom(Player &aPlayer)
 {
-
 	system("cls");
+
+	DisplayRoomTitles(roomIndex + 1);
+
+
 	//std::cout << "\n\n" << aRecentRoom.roomIndex+1 << "\n\n";
 	if (hasBeenHere == false)
 	{
@@ -66,15 +69,14 @@ void Room::EnterRoom(Player &aPlayer)
 			Enemy enemy;
 			enemies.push_back(enemy);
 		}
-
+		std::cout << "You have entered a new room!\n\n";
 		hasBeenHere = true;
 	}
 	
 
 
-	DisplayRoomTitles(roomIndex + 1);
-	std::cout << "You have entered the first room!\n\n";
-	std::cout << amountOfEnemies << " Enemies has appeard\n\n";
+	std::cout << "Be careful " << aPlayer.GetPlayerName() << ", This room may contain enemies be alert!\n\n";
+	//std::cout << amountOfEnemies << " Enemies has appeard\n\n";
 
 	for (int i = 0; i < amountOfDoores;i++) 
 	{
@@ -83,13 +85,29 @@ void Room::EnterRoom(Player &aPlayer)
 	EnterToContinue();
 	if (EnemyBattle(aPlayer) == false)
 	{
-		std::cout << "YOU DIED!";
+		system("cls");
+		std::cout << "YOU DIED " << aPlayer.GetPlayerName() << "!\nBack to Menu!";
+		EnterToContinue();
 		return;
 	}
 
 	system("pause");
 
-	DisplayRoomMenu(aPlayer);
+
+	if (roomIndex == 4)
+	{
+		std::cout << aPlayer.GetPlayerName() << ", You have escaped the ";
+		SetColor(31);
+		std::cout << "Diablo";
+		ResetColor();
+		std::cout << " dungeon, congrats!";
+
+		EnterToContinue();
+	}
+	else
+	{
+		DisplayRoomMenu(aPlayer);
+	}
 	
 }
 
@@ -103,7 +121,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 	{
 		DisplayRoomTitles(roomIndex + 1);
 
-		std::cout << "\nWhat do you wanna do?\n\n";
+		std::cout << "\nWhat do you wanna do " << aPlayer.GetPlayerName() << "?\n\n";
 		MenuChoiseBoxes('0');
 		std::cout << " STATS\n";
 
@@ -121,7 +139,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 			}
 			
 		}
-		std::cout << "\n\n";
+		std::cout << "\n";
 
 		
 
@@ -206,7 +224,7 @@ bool Room::EnemyBattle(Player& aPlayer)
 		//-------Display room title and HP for enemy and Player-------//
 		DisplayRoomTitles(roomIndex + 1);
 		SetColor(32);
-		std::cout << "Your Health is " << aPlayer.GetCurrentHealth() << "\n\n";
+		std::cout << aPlayer.GetPlayerName() << "(you) Has " << aPlayer.GetCurrentHealth() << "HP\n\n";
 		for (int i = 0; i < amountOfEnemies; i++)
 		{
 			if (enemies[i].GetHealth() <= 0)
@@ -258,7 +276,20 @@ bool Room::EnemyBattle(Player& aPlayer)
 			}
 		}
 
+		int enemiesCombinedDamage = 0;
+		for (Enemy enemy : enemies)
+		{
+			if (enemy.GetHealth() > 0)
+			{
+				enemiesCombinedDamage = enemiesCombinedDamage + enemy.GetDamage() - aPlayer.GetDefence();
+			}
+		}
+		aPlayer.TakeDamage(enemiesCombinedDamage);
 
+		if (aPlayer.GetAliveState() == false)
+		{
+			return false;
+		}
 	}
 
 	return true;

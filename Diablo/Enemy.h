@@ -4,6 +4,7 @@ class Enemy
 {
 public:
 	const int GetHealth() { return health; }							//Returning current Health
+	const int GetDamage() { return damage; }							//Returning Damage
 	void ChangeEnemyAliveState(const bool aState) { alive = aState; }	//Changes the Alive State
 
 	void TakeDamage(int aDamage)
@@ -18,5 +19,6 @@ public:
 
 private:
 	int health = 30;
+	int damage = 14;
 	bool alive = true;
 };
