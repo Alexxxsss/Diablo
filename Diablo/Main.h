@@ -2,10 +2,12 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "Loot.h"
 
 class Player
 {
 public:
+
 	// Getters
 	int GetStrength() const { return myStrength; }
 	int GetAgility() const { return myAgility; }
@@ -48,6 +50,9 @@ public:
 	{
 		myPlayerName = aPlayerName;
 	}
+
+	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",2,1,1},LootObject{"Agility Stone",1,2,1},LootObject{"Physical Stone",1,1,2} };
+	std::vector<LootObject> myCurrentLoot;
 
 private:
 	int myStrength = 5;

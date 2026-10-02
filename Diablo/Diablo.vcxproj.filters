@@ -39,12 +39,18 @@
     <ClCompile Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="Loot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Door.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

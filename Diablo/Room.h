@@ -6,6 +6,7 @@
 #include "Door.h"
 
 class Player;
+struct LootObject;
 
 class Room
 {
@@ -41,4 +42,5 @@ private:
 
 	std::vector<Door*> myDoors;
 	std::vector<Enemy> myEnemies;
+	std::vector<LootObject> myLoonOnGround;
 };
