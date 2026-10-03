@@ -19,7 +19,26 @@ void ShowStats(Player& aPlayer)
 	std::cout << "MaxHealth: " << aPlayer.GetMaxHealth() << "\n";
 	std::cout << "AttackValue: " << aPlayer.GetAttackValue() << "\n";
 	std::cout << "WeightCapacity: " << aPlayer.GetWeightCapacity() << "\n";
-	std::cout << "Defence: " << aPlayer.GetDefence() << "\n";
+	std::cout << "Defence: " << aPlayer.GetDefence() << "\n\n\n";
+
+	SetColor(33);
+	std::cout << "Inventory: \n";
+	ResetColor();
+	if (aPlayer.myCurrentLoot.size() != 0) 
+	{
+		int index = 0;
+		for (LootObject loot : aPlayer.myCurrentLoot)
+		{
+			index += 1;
+			std::cout << index << ": " << loot.lootName<< " : " << loot.lootDescription << "\n";
+
+		}
+	}
+	else 
+	{
+		std::cout << "Inventory is empty...\n";
+	}
+	
 }
 
 void PrintDiabloLogo()

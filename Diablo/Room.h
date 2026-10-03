@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Enemy.h"
+#include "Loot.h"
 #include "Door.h"
 
 class Player;
@@ -28,19 +29,26 @@ public:
 	int GetAmountOfEnemies() const { return myAmountOfEnemies; }
 	void SetAmountOfEnemies(int aAmount) { myAmountOfEnemies = aAmount; }
 
+	int GetAmountOfChests() const { return myAmountOfChests; }
+	void SetAmountOfChests(int aAmount) { myAmountOfChests = aAmount; }
+
 	int GetAmountOfDoors() const { return myAmountOfDoors; }
 	void SetAmountOfDoors(int aAmount) { myAmountOfDoors = aAmount; }
 
 	std::vector<Door*>& GetDoors() { return myDoors; }
 	std::vector<Enemy>& GetEnemies() { return myEnemies; }
+	std::vector<Chest>& GetChests() { return myChests; }
 
 private:
 	bool myHasBeenHere = false;
 	int myAmountOfEnemies = 1;
+	int myAmountOfChests = 1;
+	int myAmountOfLoot = 1;
 	int myAmountOfDoors = 1;
 	int myRoomIndex = 1;
 
 	std::vector<Door*> myDoors;
 	std::vector<Enemy> myEnemies;
-	std::vector<LootObject> myLoonOnGround;
+	std::vector<Chest> myChests;
+	std::vector<LootObject> myLoot;
 };

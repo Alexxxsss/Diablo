@@ -15,7 +15,7 @@ bool RunMenu(Player& aPlayer)
 			std::cout << " PLAY\n";
 
 			DisplayChoiceBox('2');
-			std::cout << " STATS\n";
+			std::cout << " STATS/INVENTORY\n";
 
 			DisplayChoiceBox('3');
 			std::cout << " QUIT\n";

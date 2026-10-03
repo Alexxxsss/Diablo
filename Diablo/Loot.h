@@ -9,10 +9,16 @@ struct LootObject
 {
 	std::string lootName;
 
-	int strngthMultiplyer = 1;
-	int agilityMultiplyer = 1;
-	int physicalMultiplyer = 1;
-};
+	int strngthToAdd = 1;
+	int agilityToAdd = 1;
+	int physicalToAdd = 1;
 
+	std::string lootDescription = "does nothing";
+};
 void GetRandomLootFromEnemyKilled(Player& aPlayer);
-void OpenChest(Player& aPlayer);
+LootObject ReturnRandomLoot(Player& aPlayer);
+class Chest
+{
+public:
+	void OpenChest(Player& aPlayer);
+};

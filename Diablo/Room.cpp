@@ -4,6 +4,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "Enemy.h"
+struct LootObject;
 
 Room Room::allRooms[5] = { Room(0), Room(1), Room(2), Room(3), Room(4) };
 
@@ -21,6 +22,8 @@ void Room::EnterRoom(Player& aPlayer)
 	if (!myHasBeenHere)
 	{
 		myAmountOfEnemies = RandomizeInt(1, 3);
+		myAmountOfChests = RandomizeInt(0, 2);
+		myAmountOfLoot = RandomizeInt(1, 3);
 
 		for (Door& door : Door::allDoors)
 		{
@@ -35,8 +38,17 @@ void Room::EnterRoom(Player& aPlayer)
 			Enemy enemy;
 			myEnemies.push_back(enemy);
 		}
+		for (int i = 0; i < myAmountOfChests; i++)
+		{
+			Chest chest;
+			myChests.push_back(chest);
+		}
+		for (int i = 0; i < myAmountOfLoot; i++)
+		{
+			//LootObject loot;
+			myLoot.push_back(ReturnRandomLoot(aPlayer));
+		}
 		std::cout << "You have entered a new room!\n\n";
-		myHasBeenHere = true;
 	}
 
 	std::cout << "Be careful " << aPlayer.GetPlayerName() << ", This room may contain enemies be alert!\n\n";
@@ -51,6 +63,30 @@ void Room::EnterRoom(Player& aPlayer)
 	}
 
 	system("pause");
+	//Loot logic
+	
+	if (AskYesOrNoQuestion("Do you want to look at the floor for Loot and chests?"))
+	{
+		for (LootObject &loot : myLoot)
+		{
+			std::string question = "Do you want to pick up " + static_cast<std::string>(loot.lootName);
+			if (AskYesOrNoQuestion(question))
+			{
+				aPlayer.myCurrentLoot.push_back(loot);
+				aPlayer.RecalebrateStats();
+			}
+		}
+
+		for (Chest& chest : myChests)
+		{
+			chest.OpenChest(aPlayer);
+		}
+
+	}
+
+	system("pause");
+
+	myHasBeenHere = true;
 
 	if (myRoomIndex == 4)
 	{
@@ -84,7 +120,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 
 			std::cout << "\nWhat do you wanna do " << aPlayer.GetPlayerName() << "?\n\n";
 			DisplayChoiceBox('0');
-			std::cout << " STATS\n";
+			std::cout << " STATS/INVENTORY\n";
 
 			for (size_t i = 0; i < myDoors.size(); i++)
 			{
@@ -248,7 +284,8 @@ bool Room::ExecuteBattle(Player& aPlayer)
 		{
 			if (i == menuChoice)
 			{
-				myEnemies[i - 1].TakeDamage(aPlayer.GetAttackValue());
+				bool isGoingToGiveLoot = RandomizeInt(0, 1);
+				myEnemies[i - 1].TakeDamage(aPlayer.GetAttackValue(), aPlayer, isGoingToGiveLoot);
 			}
 		}
 

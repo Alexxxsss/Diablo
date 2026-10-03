@@ -4,17 +4,28 @@
 #include "Loot.h"
 #include "Main.h"
 
-void OpenChest(Player& aPlayer)
+void Chest::OpenChest(Player& aPlayer)
 {
-	int size = static_cast<int>(aPlayer.myAllThePossibleLootToGet.size());
-	LootObject loot = aPlayer.myAllThePossibleLootToGet[RandomizeInt(0, size - 1)];
+	std::cout << "Oh a chest found!";
+	std::string question = "Do you want to open chest";
 
-	std::string question = "Wanna pick up the item from the mythical chest, the item is named: " + static_cast<std::string>(loot.lootName);
 	if (AskYesOrNoQuestion(question))
 	{
-		aPlayer.myCurrentLoot.push_back(loot);
+		int size = static_cast<int>(aPlayer.myAllThePossibleLootToGet.size());
+		LootObject loot = aPlayer.myAllThePossibleLootToGet[RandomizeInt(0, size - 1)];
+
+		question = "Oh you got " + static_cast<std::string>(loot.lootName) + " from the chest, wanna pick that up?";
+
+		if (AskYesOrNoQuestion(question))
+		{
+			aPlayer.myCurrentLoot.push_back(loot);
+			aPlayer.RecalebrateStats();
+		}
 	}
 }
+
+
+
 
 void GetRandomLootFromEnemyKilled(Player &aPlayer)
 {
@@ -26,4 +37,14 @@ void GetRandomLootFromEnemyKilled(Player &aPlayer)
 	{
 		aPlayer.myCurrentLoot.push_back(loot);
 	}
+	aPlayer.RecalebrateStats();
+}
+
+
+LootObject ReturnRandomLoot(Player& aPlayer)
+{
+	int size = static_cast<int>(aPlayer.myAllThePossibleLootToGet.size());
+	LootObject loot = aPlayer.myAllThePossibleLootToGet[RandomizeInt(0, size - 1)];
+
+	return loot;
 }

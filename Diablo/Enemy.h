@@ -1,5 +1,10 @@
 #pragma once
 
+class Player;
+
+void GetRandomLootFromEnemyKilled(Player& aPlayer);
+
+
 class Enemy
 {
 public:
@@ -11,11 +16,16 @@ public:
 	void SetHealth(const int aHealth) { myHealth = aHealth; }
 	void SetDamage(const int aDamage) { myDamage = aDamage; }
 
-	void TakeDamage(int aDamage)
+	void TakeDamage(int aDamage, Player& aPlayer, bool giveLoot = false)
 	{
 		myHealth -= aDamage;
 		if (myHealth <= 0)
 		{
+
+			if (myIsAlive == true && giveLoot)
+			{
+				GetRandomLootFromEnemyKilled(aPlayer);
+			}
 			SetAliveState(false);
 			myHealth = 0;
 		}

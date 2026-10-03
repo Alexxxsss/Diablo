@@ -51,13 +51,42 @@ public:
 		myPlayerName = aPlayerName;
 	}
 
-	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",2,1,1},LootObject{"Agility Stone",1,2,1},LootObject{"Physical Stone",1,1,2} };
+	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",1,0,0, "You get more stregth"},LootObject{"Agility Stone",0,1,0, "You get more agility"},LootObject{"Physical Stone",0,0,1, "You get more physical"},LootObject{"Srap",0,0,0}};
 	std::vector<LootObject> myCurrentLoot;
+
+	void RecalebrateStats()
+	{
+		myStrength = myStartStrength;
+		myAgility = myStartAgility;
+		myPhysical = myStartPhysical;
+
+		for (LootObject loot : myCurrentLoot)
+		{
+			myStrength += loot.strngthToAdd;
+			myAgility += loot.agilityToAdd;
+			myPhysical += loot.physicalToAdd;
+		}
+
+
+		myStartStrength = myStrength;
+		myStartAgility = myAgility;
+		myStartPhysical = myPhysical;
+
+		myMaxHealth = (myPhysical * 4 + myStrength * 6 + myAgility * 3);
+		myAttackValue = (myStrength * myAgility);
+		myWeightCapacity = (myStrength + myAgility / 3);
+		myDefence = (myPhysical + myAgility);
+	}
 
 private:
 	int myStrength = 5;
 	int myAgility = 5;
 	int myPhysical = 5;
+
+	int myStartStrength = myStrength;
+	int myStartAgility = myAgility;
+	int myStartPhysical = myPhysical;
+
 	int myMaxHealth = (myPhysical * 4 + myStrength * 6 + myAgility * 3);
 	int myAttackValue = (myStrength * myAgility);
 	int myWeightCapacity = (myStrength + myAgility / 3);
