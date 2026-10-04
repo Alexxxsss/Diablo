@@ -84,7 +84,7 @@ void Room::EnterRoom(Player& aPlayer)
 			
 			if (AskYesOrNoQuestion(question))
 			{
-				aPlayer.myCurrentLoot.push_back(loot);
+				aPlayer.GetAllCurrentLoot().push_back(loot);
 				aPlayer.RecalebrateStats();
 			}
 		}
@@ -101,7 +101,7 @@ void Room::EnterRoom(Player& aPlayer)
 
 			if (AskYesOrNoQuestion(question))
 			{
-				aPlayer.myCurrentSpells.push_back(spell);
+				aPlayer.GetAllCurrentSpells().push_back(spell);
 				aPlayer.RecalebrateSpells();
 			}
 		}

@@ -24,10 +24,10 @@ void ShowStats(Player& aPlayer)
 	SetColor(33);
 	std::cout << "Inventory " <<aPlayer.CalculateInventoryWeight()<< "/"<< aPlayer.GetWeightCapacity() << ":\n";
 	ResetColor();
-	if (aPlayer.myCurrentLoot.size() != 0) 
+	if (aPlayer.GetAllCurrentLoot().size() != 0)
 	{
 		int index = 0;
-		for (LootObject loot : aPlayer.myCurrentLoot)
+		for (LootObject loot : aPlayer.GetAllCurrentLoot())
 		{
 			index += 1;
 			std::cout << index << ": " << loot.lootName<< " : " << loot.lootDescription << "\n";

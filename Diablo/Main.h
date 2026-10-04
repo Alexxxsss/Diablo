@@ -51,11 +51,26 @@ public:
 		myPlayerName = aPlayerName;
 	}
 
-	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",1,0,0,1, "You get more stregth"},LootObject{"Agility Stone",0,1,0,1, "You get more agility"},LootObject{"Physical Stone",0,0,1,1, "You get more physical"},LootObject{"Srap",0,0,0}};
-	std::vector<LootObject> myCurrentLoot;
+	std::vector<LootObject> GetAllLootPossibleToGet()
+	{
+		return myAllThePossibleLootToGet;
+	}
 
-	std::vector<Spells> myAllThePossibleSpellsToGet = { Spells{"Strength Spell",1,0,0,2, "You get more stregth"},Spells{"Agility Spell",0,1,0,2, "You get more agility"},Spells{"Physical Spell",0,0,1,2, "You get more physical"}};
-	std::vector<Spells> myCurrentSpells;
+	std::vector<LootObject> GetAllCurrentLoot()
+	{
+		return myCurrentLoot;
+	}
+
+	std::vector<Spells> GetAllSpellsPossibleToGet()
+	{
+		return myAllThePossibleSpellsToGet;
+	}
+
+	std::vector<Spells> GetAllCurrentSpells()
+	{
+		return myCurrentSpells;
+	}
+
 
 	void RecalebrateSpellsAfterLeavingRoom()
 	{
@@ -105,15 +120,11 @@ public:
 
 		for (LootObject &loot : myCurrentLoot)
 		{
-			myStrength += loot.strngthToAdd + mySpellStrength;
-			myAgility += loot.agilityToAdd + mySpellAgility;
-			myPhysical += loot.physicalToAdd + mySpellPhysical;
+			myStrength = myStrength + loot.strngthToAdd + mySpellStrength;
+			myAgility = myAgility + loot.agilityToAdd + mySpellAgility;
+			myPhysical = myPhysical + loot.physicalToAdd + mySpellPhysical;
 		}
 
-
-		myStartStrength = myStrength;
-		myStartAgility = myAgility;
-		myStartPhysical = myPhysical;
 
 		myMaxHealth = (myPhysical * 4 + myStrength * 6 + myAgility * 3);
 		myAttackValue = (myStrength * myAgility);
@@ -156,6 +167,13 @@ private:
 	bool myIsAlive = true;
 	bool myHasBeenToEveryRoom = false;
 	std::string myPlayerName;
+
+
+	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",1,0,0,1, "You get more stregth"},LootObject{"Agility Stone",0,1,0,1, "You get more agility"},LootObject{"Physical Stone",0,0,1,1, "You get more physical"},LootObject{"Srap",0,0,0} };
+	std::vector<LootObject> myCurrentLoot;
+
+	std::vector<Spells> myAllThePossibleSpellsToGet = { Spells{"Strength Spell",1,0,0,2, "You get more stregth"},Spells{"Agility Spell",0,1,0,2, "You get more agility"},Spells{"Physical Spell",0,0,1,2, "You get more physical"} };
+	std::vector<Spells> myCurrentSpells;
 };
 
 enum class MenuStates

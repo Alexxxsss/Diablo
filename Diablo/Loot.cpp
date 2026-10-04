@@ -11,8 +11,8 @@ void Chest::OpenChest(Player& aPlayer)
 
 	if (AskYesOrNoQuestion(question))
 	{
-		int size = static_cast<int>(aPlayer.myAllThePossibleLootToGet.size());
-		LootObject loot = aPlayer.myAllThePossibleLootToGet[RandomizeInt(0, size - 1)];
+		int size = static_cast<int>(aPlayer.GetAllLootPossibleToGet().size());
+		LootObject loot = aPlayer.GetAllLootPossibleToGet()[RandomizeInt(0, size - 1)];
 		question = "Oh you got " + static_cast<std::string>(loot.lootName) + " from the chest, wanna pick that up?";
 
 		if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.weight)
@@ -23,7 +23,7 @@ void Chest::OpenChest(Player& aPlayer)
 		{
 			if (AskYesOrNoQuestion(question))
 			{
-				aPlayer.myCurrentLoot.push_back(loot);
+				aPlayer.GetAllCurrentLoot().push_back(loot);
 				aPlayer.RecalebrateStats();
 			}
 		}
@@ -37,8 +37,8 @@ void Chest::OpenChest(Player& aPlayer)
 
 void GetRandomLootFromEnemyKilled(Player &aPlayer)
 {
-	int size = static_cast<int>(aPlayer.myAllThePossibleLootToGet.size());
-	LootObject loot = aPlayer.myAllThePossibleLootToGet[RandomizeInt(0, size-1)];
+	int size = static_cast<int>(aPlayer.GetAllLootPossibleToGet().size());
+	LootObject loot = aPlayer.GetAllLootPossibleToGet()[RandomizeInt(0, size-1)];
 
 	std::string question = "Congrats to your kill, wanna pick up the item he hold on to named: " + static_cast<std::string>(loot.lootName);
 	
@@ -50,7 +50,7 @@ void GetRandomLootFromEnemyKilled(Player &aPlayer)
 	{
 		if (AskYesOrNoQuestion(question))
 		{
-			aPlayer.myCurrentLoot.push_back(loot);
+			aPlayer.GetAllCurrentLoot().push_back(loot);
 		}
 	}
 	
@@ -60,8 +60,8 @@ void GetRandomLootFromEnemyKilled(Player &aPlayer)
 
 LootObject ReturnRandomLoot(Player& aPlayer)
 {
-	int size = static_cast<int>(aPlayer.myAllThePossibleLootToGet.size());
-	LootObject loot = aPlayer.myAllThePossibleLootToGet[RandomizeInt(0, size - 1)];
+	int size = static_cast<int>(aPlayer.GetAllLootPossibleToGet().size());
+	LootObject loot = aPlayer.GetAllLootPossibleToGet()[RandomizeInt(0, size - 1)];
 
 	return loot;
 }
@@ -69,8 +69,8 @@ LootObject ReturnRandomLoot(Player& aPlayer)
 
 Spells ReturnRandomSpell(Player& aPlayer)
 {
-	int size = static_cast<int>(aPlayer.myAllThePossibleSpellsToGet.size());
-	Spells spell = aPlayer.myAllThePossibleSpellsToGet[RandomizeInt(0, size - 1)];
+	int size = static_cast<int>(aPlayer.GetAllSpellsPossibleToGet().size());
+	Spells spell = aPlayer.GetAllSpellsPossibleToGet()[RandomizeInt(0, size - 1)];
 
 	return spell;
 }
@@ -79,7 +79,7 @@ void DisplayActiveSpells(Player& aPlayer)
 {
 	SetColor(35);
 
-	for (Spells& spell : aPlayer.myCurrentSpells)
+	for (Spells& spell : aPlayer.GetAllCurrentSpells())
 	{
 		std::cout << spell.spellName << " : " << spell.spellDescription << "\n";
 	}

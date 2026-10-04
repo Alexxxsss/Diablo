@@ -51,11 +51,18 @@ MenuStates GetMenuChoiceState(int& aChoice)
 	switch (aChoice)
 	{
 	case 1:
+	{
 		return MenuStates::Play;
+	}
 	case 2:
+	{
 		return MenuStates::Stats;
+	}
 	case 3:
+	{
 		return MenuStates::Quit;
+
+	}
 	}
 
 	return MenuStates::Quit;
