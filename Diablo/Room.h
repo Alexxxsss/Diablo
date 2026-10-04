@@ -43,6 +43,7 @@ private:
 	bool myHasBeenHere = false;
 	int myAmountOfEnemies = 1;
 	int myAmountOfChests = 1;
+	int myAmountOfSpells = 1;
 	int myAmountOfLoot = 1;
 	int myAmountOfDoors = 1;
 	int myRoomIndex = 1;
@@ -50,5 +51,6 @@ private:
 	std::vector<Door*> myDoors;
 	std::vector<Enemy> myEnemies;
 	std::vector<Chest> myChests;
+	std::vector<Spells> mySpells;
 	std::vector<LootObject> myLoot;
 };

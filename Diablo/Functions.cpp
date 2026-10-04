@@ -22,7 +22,7 @@ void ShowStats(Player& aPlayer)
 	std::cout << "Defence: " << aPlayer.GetDefence() << "\n\n\n";
 
 	SetColor(33);
-	std::cout << "Inventory: \n";
+	std::cout << "Inventory " <<aPlayer.CalculateInventoryWeight()<< "/"<< aPlayer.GetWeightCapacity() << ":\n";
 	ResetColor();
 	if (aPlayer.myCurrentLoot.size() != 0) 
 	{
@@ -54,7 +54,7 @@ void PrintDiabloLogo()
 	ResetColor();
 }
 
-void DisplayRoomTitles(int aRoomIndex)
+void DisplayRoomTitles(int aRoomIndex, Player& aPlayer)
 {
 	SetColor(31);
 	switch (aRoomIndex)
@@ -103,6 +103,9 @@ void DisplayRoomTitles(int aRoomIndex)
 		break;
 	}
 	ResetColor();
+
+	DisplayActiveSpells(aPlayer);
+
 }
 
 void WaitForEnterToContinue()

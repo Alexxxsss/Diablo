@@ -51,8 +51,51 @@ public:
 		myPlayerName = aPlayerName;
 	}
 
-	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",1,0,0, "You get more stregth"},LootObject{"Agility Stone",0,1,0, "You get more agility"},LootObject{"Physical Stone",0,0,1, "You get more physical"},LootObject{"Srap",0,0,0}};
+	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",1,0,0,1, "You get more stregth"},LootObject{"Agility Stone",0,1,0,1, "You get more agility"},LootObject{"Physical Stone",0,0,1,1, "You get more physical"},LootObject{"Srap",0,0,0}};
 	std::vector<LootObject> myCurrentLoot;
+
+	std::vector<Spells> myAllThePossibleSpellsToGet = { Spells{"Strength Spell",1,0,0,2, "You get more stregth"},Spells{"Agility Spell",0,1,0,2, "You get more agility"},Spells{"Physical Spell",0,0,1,2, "You get more physical"}};
+	std::vector<Spells> myCurrentSpells;
+
+	void RecalebrateSpellsAfterLeavingRoom()
+	{
+		for (Spells& spell : myCurrentSpells)
+		{
+			spell.roomDuration--;
+			RecalebrateSpells();
+		}
+
+		RecalebrateStats();
+	}
+
+	void RecalebrateSpells()
+	{
+		mySpellStrength = 0;
+		mySpellAgility = 0;
+		mySpellPhysical = 0;
+		int index = 0;
+
+		for (Spells& spell : myCurrentSpells)
+		{
+			if (spell.roomDuration == 0)
+			{
+				myCurrentSpells.erase(myCurrentSpells.begin() + index);
+
+				mySpellStrength -= spell.strngthToAdd;
+				mySpellAgility -= spell.agilityToAdd;
+				mySpellPhysical -= spell.physicalToAdd;
+			}
+			else
+			{
+				mySpellStrength += spell.strngthToAdd;
+				mySpellAgility += spell.agilityToAdd;
+				mySpellPhysical += spell.physicalToAdd;
+			}
+			index++;
+		}
+		RecalebrateStats();
+	}
+
 
 	void RecalebrateStats()
 	{
@@ -60,11 +103,11 @@ public:
 		myAgility = myStartAgility;
 		myPhysical = myStartPhysical;
 
-		for (LootObject loot : myCurrentLoot)
+		for (LootObject &loot : myCurrentLoot)
 		{
-			myStrength += loot.strngthToAdd;
-			myAgility += loot.agilityToAdd;
-			myPhysical += loot.physicalToAdd;
+			myStrength += loot.strngthToAdd + mySpellStrength;
+			myAgility += loot.agilityToAdd + mySpellAgility;
+			myPhysical += loot.physicalToAdd + mySpellPhysical;
 		}
 
 
@@ -78,6 +121,19 @@ public:
 		myDefence = (myPhysical + myAgility);
 	}
 
+	int CalculateInventoryWeight()
+	{
+		int weight = 0;
+
+		for (LootObject loot : myCurrentLoot)
+		{
+			weight += loot.weight;
+		}
+
+
+		return weight;
+	}
+
 private:
 	int myStrength = 5;
 	int myAgility = 5;
@@ -86,6 +142,10 @@ private:
 	int myStartStrength = myStrength;
 	int myStartAgility = myAgility;
 	int myStartPhysical = myPhysical;
+
+	int mySpellStrength = 0;
+	int mySpellAgility = 0;
+	int mySpellPhysical = 0;
 
 	int myMaxHealth = (myPhysical * 4 + myStrength * 6 + myAgility * 3);
 	int myAttackValue = (myStrength * myAgility);
@@ -118,7 +178,7 @@ void DisplayChoiceBox(int aChoice, bool aIsInt = false);
 MenuStates GetMenuChoiceState(int& aChoice);
 bool AskYesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative = "YES", std::string aNegativeAlternative = "NO");
 void CheckForInputFails(int aInput, int aMinInput, int aMaxInput);
-void DisplayRoomTitles(int aRoomIndex);
+void DisplayRoomTitles(int aRoomIndex, Player& aPlayer);
 int AskMultipleChoiceQuestion(int aMinValue = 1, int aMaxValue = 3, std::vector<std::string> aAllChoices = {});
 bool CheckIfYouBeenToAllRooms();
 void DisplayPregameOptions(Player& aPlayer);

@@ -17,12 +17,12 @@ void Room::EnterRoom(Player& aPlayer)
 {
 	system("cls");
 
-	DisplayRoomTitles(myRoomIndex + 1);
-
+	DisplayRoomTitles(myRoomIndex + 1, aPlayer);
 	if (!myHasBeenHere)
 	{
 		myAmountOfEnemies = RandomizeInt(1, 3);
 		myAmountOfChests = RandomizeInt(0, 2);
+		myAmountOfSpells = RandomizeInt(0, 1);
 		myAmountOfLoot = RandomizeInt(1, 3);
 
 		for (Door& door : Door::allDoors)
@@ -48,6 +48,11 @@ void Room::EnterRoom(Player& aPlayer)
 			//LootObject loot;
 			myLoot.push_back(ReturnRandomLoot(aPlayer));
 		}
+		for (int i = 0; i < myAmountOfSpells; i++)
+		{
+			//LootObject loot;
+			mySpells.push_back(ReturnRandomSpell(aPlayer));
+		}
 		std::cout << "You have entered a new room!\n\n";
 	}
 
@@ -65,11 +70,18 @@ void Room::EnterRoom(Player& aPlayer)
 	system("pause");
 	//Loot logic
 	
-	if (AskYesOrNoQuestion("Do you want to look at the floor for Loot and chests?"))
+	if (AskYesOrNoQuestion("Do you want to look at the floor for Loot and chests, or maybe some spell?"))
 	{
 		for (LootObject &loot : myLoot)
 		{
 			std::string question = "Do you want to pick up " + static_cast<std::string>(loot.lootName);
+
+			if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.weight)
+			{
+				std::cout << loot.lootName << " is to heavy for you inventory";
+				continue;
+			}
+			
 			if (AskYesOrNoQuestion(question))
 			{
 				aPlayer.myCurrentLoot.push_back(loot);
@@ -82,6 +94,17 @@ void Room::EnterRoom(Player& aPlayer)
 			chest.OpenChest(aPlayer);
 		}
 
+		for (Spells& spell : mySpells)
+		{
+			std::string question = "Do you want to use the " + static_cast<std::string>(spell.spellName);
+
+
+			if (AskYesOrNoQuestion(question))
+			{
+				aPlayer.myCurrentSpells.push_back(spell);
+				aPlayer.RecalebrateSpells();
+			}
+		}
 	}
 
 	system("pause");
@@ -116,7 +139,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 
 		while (true)
 		{
-			DisplayRoomTitles(myRoomIndex + 1);
+			DisplayRoomTitles(myRoomIndex + 1, aPlayer);
 
 			std::cout << "\nWhat do you wanna do " << aPlayer.GetPlayerName() << "?\n\n";
 			DisplayChoiceBox('0');
@@ -151,7 +174,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 		if (menuChoice == 0)
 		{
 			system("cls");
-			DisplayRoomTitles(myRoomIndex + 1);
+			DisplayRoomTitles(myRoomIndex + 1, aPlayer);
 			ShowStats(aPlayer);
 			WaitForEnterToContinue();
 			continue;
@@ -175,6 +198,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 						selectedDoor->SetIsLocked(false);
 						std::cout << "Lock picked!";
 						WaitForEnterToContinue();
+						aPlayer.RecalebrateSpellsAfterLeavingRoom();
 						targetRoom->EnterRoom(aPlayer);
 						return;
 					}
@@ -203,6 +227,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 						selectedDoor->SetIsLocked(false);
 						std::cout << "Door broken!";
 						WaitForEnterToContinue();
+						aPlayer.RecalebrateSpellsAfterLeavingRoom();
 						targetRoom->EnterRoom(aPlayer);
 						return;
 					}
@@ -223,6 +248,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 		}
 		else
 		{
+			aPlayer.RecalebrateSpellsAfterLeavingRoom();
 			targetRoom->EnterRoom(aPlayer);
 			return;
 		}
@@ -236,7 +262,7 @@ bool Room::ExecuteBattle(Player& aPlayer)
 	{
 		system("cls");
 
-		DisplayRoomTitles(myRoomIndex + 1);
+		DisplayRoomTitles(myRoomIndex + 1, aPlayer);
 		std::cout << "You are in battle! If you type wrong you miss your attack!\n\n";
 		SetColor(32);
 		std::cout << aPlayer.GetPlayerName() << "(you) Has " << aPlayer.GetCurrentHealth() << "HP\n\n";
