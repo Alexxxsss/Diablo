@@ -51,22 +51,22 @@ public:
 		myPlayerName = aPlayerName;
 	}
 
-	std::vector<LootObject> GetAllLootPossibleToGet()
+	std::vector<LootObject> &GetAllLootPossibleToGet()
 	{
 		return myAllThePossibleLootToGet;
 	}
 
-	std::vector<LootObject> GetAllCurrentLoot()
+	std::vector<LootObject>& GetAllCurrentLoot()
 	{
 		return myCurrentLoot;
 	}
 
-	std::vector<Spells> GetAllSpellsPossibleToGet()
+	std::vector<Spells>& GetAllSpellsPossibleToGet()
 	{
 		return myAllThePossibleSpellsToGet;
 	}
 
-	std::vector<Spells> GetAllCurrentSpells()
+	std::vector<Spells>& GetAllCurrentSpells()
 	{
 		return myCurrentSpells;
 	}
