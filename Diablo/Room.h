@@ -7,7 +7,6 @@
 #include "Door.h"
 
 class Player;
-struct LootObject;
 
 class Room
 {
@@ -16,9 +15,9 @@ public:
 
 	Room(int aRoomIndex);
 
-	void EnterRoom(Player& aPlayer);
-	void DisplayRoomMenu(Player& aPlayer);
-	bool ExecuteBattle(Player& aPlayer);
+	void EnterRoom(Player& aPlayer, ItemFactory &aItemFactory);
+	void DisplayRoomMenu(Player& aPlayer, ItemFactory& aItemFactory);
+	bool ExecuteBattle(Player& aPlayer, ItemFactory& aItemFactory);
 
 	int GetRoomIndex() const { return myRoomIndex; }
 	void SetRoomIndex(int aRoomIndex) { myRoomIndex = aRoomIndex; }

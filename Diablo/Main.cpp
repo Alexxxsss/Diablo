@@ -5,6 +5,7 @@
 int main()
 {
 	Player player;
-	RunGameLoop(player);
+	ItemFactory itemFactory;
+	RunGameLoop(player, itemFactory);
 	return 0;
 }

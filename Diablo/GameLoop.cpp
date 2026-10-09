@@ -2,7 +2,7 @@
 #include "Room.h"
 #include <iostream>
 
-void RunGameLoop(Player& aPlayer)
+void RunGameLoop(Player& aPlayer, ItemFactory &aItemFactory)
 {
 	if (!AskYesOrNoQuestion("Wanna cheat by having nearly infinite hp?", "NO", "YES"))
 	{
@@ -45,7 +45,7 @@ void RunGameLoop(Player& aPlayer)
 		std::cout << " and kill all \nthe enemies to escape the dungeon and win\n\n";
 		if (AskYesOrNoQuestion("Wanna enter the first room? "))
 		{
-			Room::allRooms[0].EnterRoom(aPlayer);
+			Room::allRooms[0].EnterRoom(aPlayer, aItemFactory);
 		}
 		break;
 	}

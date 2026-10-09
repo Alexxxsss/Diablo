@@ -4,7 +4,7 @@
 #include "Room.h"
 #include "Door.h"
 #include "Enemy.h"
-struct LootObject;
+#include "Loot.h"
 
 Room Room::allRooms[5] = { Room(0), Room(1), Room(2), Room(3), Room(4) };
 
@@ -13,7 +13,7 @@ Room::Room(int aRoomIndex)
 	myRoomIndex = aRoomIndex;
 }
 
-void Room::EnterRoom(Player& aPlayer)
+void Room::EnterRoom(Player& aPlayer, ItemFactory& aItemFactory)
 {
 	system("cls");
 
@@ -46,7 +46,7 @@ void Room::EnterRoom(Player& aPlayer)
 		for (int i = 0; i < myAmountOfLoot; i++)
 		{
 			//LootObject loot;
-			myLoot.push_back(ReturnRandomLoot(aPlayer));
+			myLoot.push_back(ReturnRandomLoot(aItemFactory));
 		}
 		for (int i = 0; i < myAmountOfSpells; i++)
 		{
@@ -59,7 +59,7 @@ void Room::EnterRoom(Player& aPlayer)
 	std::cout << "Be careful " << aPlayer.GetPlayerName() << ", This room may contain enemies be alert!\n\n";
 
 	WaitForEnterToContinue();
-	if (!ExecuteBattle(aPlayer))
+	if (!ExecuteBattle(aPlayer, aItemFactory))
 	{
 		system("cls");
 		std::cout << "YOU DIED " << aPlayer.GetPlayerName() << "!\nByeBye!";
@@ -74,11 +74,11 @@ void Room::EnterRoom(Player& aPlayer)
 	{
 		for (LootObject &loot : myLoot)
 		{
-			std::string question = "Do you want to pick up " + static_cast<std::string>(loot.lootName);
+			std::string question = "Do you want to pick up " + static_cast<std::string>(loot.GetName());
 
-			if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.weight)
+			if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.GetWeight())
 			{
-				std::cout << loot.lootName << " is to heavy for you inventory";
+				std::cout << loot.GetName() << " is to heavy for you inventory";
 				continue;
 			}
 			
@@ -91,7 +91,7 @@ void Room::EnterRoom(Player& aPlayer)
 
 		for (Chest& chest : myChests)
 		{
-			chest.OpenChest(aPlayer);
+			chest.OpenChest(aPlayer, aItemFactory);
 		}
 
 		for (Spells& spell : mySpells)
@@ -123,11 +123,11 @@ void Room::EnterRoom(Player& aPlayer)
 	}
 	else
 	{
-		DisplayRoomMenu(aPlayer);
+		DisplayRoomMenu(aPlayer,aItemFactory);
 	}
 }
 
-void Room::DisplayRoomMenu(Player& aPlayer)
+void Room::DisplayRoomMenu(Player& aPlayer, ItemFactory& aItemFactory)
 {
 	int menuChoice = 0;
 
@@ -199,7 +199,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 						std::cout << "Lock picked!";
 						WaitForEnterToContinue();
 						aPlayer.RecalebrateSpellsAfterLeavingRoom();
-						targetRoom->EnterRoom(aPlayer);
+						targetRoom->EnterRoom(aPlayer, aItemFactory);
 						return;
 					}
 					else
@@ -228,7 +228,7 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 						std::cout << "Door broken!";
 						WaitForEnterToContinue();
 						aPlayer.RecalebrateSpellsAfterLeavingRoom();
-						targetRoom->EnterRoom(aPlayer);
+						targetRoom->EnterRoom(aPlayer, aItemFactory);
 						return;
 					}
 					else
@@ -249,13 +249,13 @@ void Room::DisplayRoomMenu(Player& aPlayer)
 		else
 		{
 			aPlayer.RecalebrateSpellsAfterLeavingRoom();
-			targetRoom->EnterRoom(aPlayer);
+			targetRoom->EnterRoom(aPlayer, aItemFactory);
 			return;
 		}
 	}
 }
 
-bool Room::ExecuteBattle(Player& aPlayer)
+bool Room::ExecuteBattle(Player& aPlayer, ItemFactory& aItemFactory)
 {
 	int menuChoice = 0;
 	while (true)
@@ -311,7 +311,7 @@ bool Room::ExecuteBattle(Player& aPlayer)
 			if (i == menuChoice)
 			{
 				bool isGoingToGiveLoot = RandomizeInt(0, 1);
-				myEnemies[i - 1].TakeDamage(aPlayer.GetAttackValue(), aPlayer, isGoingToGiveLoot);
+				myEnemies[i - 1].TakeDamage(aPlayer.GetAttackValue(), aPlayer,aItemFactory, isGoingToGiveLoot);
 			}
 		}
 

@@ -30,7 +30,7 @@ void ShowStats(Player& aPlayer)
 		for (LootObject loot : aPlayer.GetAllCurrentLoot())
 		{
 			index += 1;
-			std::cout << index << ": " << loot.lootName<< " : " << loot.lootDescription << "\n";
+			std::cout << index << ": " << loot.GetName()<< " : " << loot.GetDescription() << "\n";
 
 		}
 	}

@@ -4,20 +4,19 @@
 #include "Loot.h"
 #include "Main.h"
 
-void Chest::OpenChest(Player& aPlayer)
+void Chest::OpenChest(Player& aPlayer, ItemFactory &aItemFactory)
 {
+	LootObject loot = aItemFactory.CreateRandomObject();
 	std::cout << "Oh a chest found!";
 	std::string question = "Do you want to open chest";
 
 	if (AskYesOrNoQuestion(question))
 	{
-		int size = static_cast<int>(aPlayer.GetAllLootPossibleToGet().size());
-		LootObject loot = aPlayer.GetAllLootPossibleToGet()[RandomizeInt(0, size - 1)];
-		question = "Oh you got " + static_cast<std::string>(loot.lootName) + " from the chest, wanna pick that up?";
+		question = "Oh you got " + static_cast<std::string>(loot.GetName()) + " from the chest, wanna pick that up?";
 
-		if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.weight)
+		if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.GetWeight())
 		{
-			std::cout << loot.lootName << " is to heavy for you inventory";
+			std::cout << loot.GetName() << " is to heavy for you inventory";
 		}
 		else 
 		{
@@ -35,16 +34,16 @@ void Chest::OpenChest(Player& aPlayer)
 
 
 
-void GetRandomLootFromEnemyKilled(Player &aPlayer)
+void GetRandomLootFromEnemyKilled(Player &aPlayer, ItemFactory &aItemFactory)
 {
-	int size = static_cast<int>(aPlayer.GetAllLootPossibleToGet().size());
-	LootObject loot = aPlayer.GetAllLootPossibleToGet()[RandomizeInt(0, size-1)];
+	LootObject loot = aItemFactory.CreateRandomObject();
 
-	std::string question = "Congrats to your kill, wanna pick up the item he hold on to named: " + static_cast<std::string>(loot.lootName);
+
+	std::string question = "Congrats to your kill, wanna pick up the item he hold on to named: " + static_cast<std::string>(loot.GetName());
 	
-	if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.weight)
+	if (aPlayer.GetWeightCapacity() < aPlayer.CalculateInventoryWeight() + loot.GetWeight())
 	{
-		std::cout << loot.lootName << " is to heavy for you inventory";
+		std::cout << loot.GetName() << " is to heavy for you inventory";
 	}
 	else
 	{
@@ -58,10 +57,9 @@ void GetRandomLootFromEnemyKilled(Player &aPlayer)
 }
 
 
-LootObject ReturnRandomLoot(Player& aPlayer)
+LootObject ReturnRandomLoot(ItemFactory &aItemFactory)
 {
-	int size = static_cast<int>(aPlayer.GetAllLootPossibleToGet().size());
-	LootObject loot = aPlayer.GetAllLootPossibleToGet()[RandomizeInt(0, size - 1)];
+	LootObject loot = aItemFactory.CreateRandomObject();
 
 	return loot;
 }

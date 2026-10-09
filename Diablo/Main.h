@@ -51,10 +51,12 @@ public:
 		myPlayerName = aPlayerName;
 	}
 
+	/*
 	std::vector<LootObject> &GetAllLootPossibleToGet()
 	{
-		return myAllThePossibleLootToGet;
+		//return myAllThePossibleLootToGet;
 	}
+	*/
 
 	std::vector<LootObject>& GetAllCurrentLoot()
 	{
@@ -120,9 +122,9 @@ public:
 
 		for (LootObject &loot : myCurrentLoot)
 		{
-			myStrength = myStrength + loot.strngthToAdd + mySpellStrength;
-			myAgility = myAgility + loot.agilityToAdd + mySpellAgility;
-			myPhysical = myPhysical + loot.physicalToAdd + mySpellPhysical;
+			myStrength = myStrength + loot.GetStrength() + mySpellStrength;
+			myAgility = myAgility + loot.GetAgility() + mySpellAgility;
+			myPhysical = myPhysical + loot.GetPhysical() + mySpellPhysical;
 		}
 
 
@@ -138,7 +140,7 @@ public:
 
 		for (LootObject loot : myCurrentLoot)
 		{
-			weight += loot.weight;
+			weight += loot.GetWeight();
 		}
 
 
@@ -169,7 +171,6 @@ private:
 	std::string myPlayerName;
 
 
-	std::vector<LootObject> myAllThePossibleLootToGet = { LootObject{"Strength Stone",1,0,0,1, "You get more stregth"},LootObject{"Agility Stone",0,1,0,1, "You get more agility"},LootObject{"Physical Stone",0,0,1,1, "You get more physical"},LootObject{"Srap",0,0,0} };
 	std::vector<LootObject> myCurrentLoot;
 
 	std::vector<Spells> myAllThePossibleSpellsToGet = { Spells{"Strength Spell",1,0,0,2, "You get more stregth"},Spells{"Agility Spell",0,1,0,2, "You get more agility"},Spells{"Physical Spell",0,0,1,2, "You get more physical"} };
@@ -183,20 +184,8 @@ enum class MenuStates
 	Quit
 };
 
-void WaitForEnterToContinue();
-void PrintDiabloLogo();
-void RunGameLoop(Player& aPlayer);
-void ShowStats(Player& aPlayer);
-void SetColor(int aTextColor);
-void ResetColor();
-int RandomizeInt(int aMinInclusive, int aMaxInclusive);
+void RunGameLoop(Player& aPlayer, ItemFactory& aItemFactory);
 bool RunMenu(Player& aPlayer);
 void DisplayStatsInMenu(Player& aPlayer);
-void DisplayChoiceBox(int aChoice, bool aIsInt = false);
 MenuStates GetMenuChoiceState(int& aChoice);
-bool AskYesOrNoQuestion(std::string aQuestion, std::string aPositiveAlternative = "YES", std::string aNegativeAlternative = "NO");
-void CheckForInputFails(int aInput, int aMinInput, int aMaxInput);
-void DisplayRoomTitles(int aRoomIndex, Player& aPlayer);
-int AskMultipleChoiceQuestion(int aMinValue = 1, int aMaxValue = 3, std::vector<std::string> aAllChoices = {});
-bool CheckIfYouBeenToAllRooms();
 void DisplayPregameOptions(Player& aPlayer);
